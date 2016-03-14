@@ -1,0 +1,11 @@
+.\obj\systick.o: src\user\systick.c
+.\obj\systick.o: .\src\lib\inc\LPC11xx.h
+.\obj\systick.o: .\src\lib\inc\core_cm0.h
+.\obj\systick.o: C:\Keil\ARM\RV31\INC\stdint.h
+.\obj\systick.o: .\src\lib\inc\system_LPC11xx.h
+.\obj\systick.o: src\user\systick.h
+.\obj\systick.o: .\src\lib\inc\gpio.h
+.\obj\systick.o: .\src\UCOS2_SOURCE\ucos_ii.h
+.\obj\systick.o: .\src\UCOS2_SOURCE\os_cfg.h
+.\obj\systick.o: .\src\UCOS2_PORT\os_cpu.h
+.\obj\systick.o: src\user\config.h

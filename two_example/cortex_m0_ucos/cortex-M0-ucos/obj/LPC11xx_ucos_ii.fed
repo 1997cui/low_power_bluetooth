@@ -1,0 +1,31 @@
+;#<FEEDBACK># ARM Linker, 4.1 [Build 481]: Last Updated: Mon Mar 14 17:14:15 2011
+;VERSION 0.2
+;FILE device_init.o
+;FILE gpio.o
+GPIOIntDisable <= USED 0
+GPIOIntEnable <= USED 0
+GPIOSetInterrupt <= USED 0
+GPIOSetValue <= USED 0
+READ_GPIO <= USED 0
+READ_GPIOBIT <= USED 0
+SET_GPIO <= USED 0
+;FILE main.o
+;FILE os_core.o
+OSVersion <= USED 0
+OS_Dummy <= USED 0
+OS_MemCopy <= USED 0
+;FILE os_cpu_c.o
+OSTaskDelHook <= USED 0
+OSTaskStatHook <= USED 0
+OS_CPU_ExceptStkChk <= USED 0
+;FILE os_task.o
+OSTaskDel <= USED 0
+OSTaskDelReq <= USED 0
+OSTaskNameGet <= USED 0
+OSTaskResume <= USED 0
+OSTaskSuspend <= USED 0
+;FILE os_time.o
+OSTimeDlyResume <= USED 0
+;FILE startup_lpc11xx.o
+;FILE system_lpc11xx.o
+;FILE systick.o

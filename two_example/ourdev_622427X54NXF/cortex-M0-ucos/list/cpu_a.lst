@@ -1,0 +1,64 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 EXPORT           CPU_IntDis
+    2 00000000                 EXPORT           CPU_IntEn
+    3 00000000         
+    4 00000000         
+    5 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
+2
+    6 00000000                 THUMB
+    7 00000000                 REQUIRE8
+    8 00000000                 PRESERVE8
+    9 00000000         
+   10 00000000         
+   11 00000000         ;************************
+   12 00000000         ;中断使能和失能定义
+   13 00000000         ;************************
+   14 00000000         CPU_IntEn
+   15 00000000 B662            CPSIE            I
+   16 00000002 4770            BX               LR
+   17 00000004         
+   18 00000004         CPU_IntDis
+   19 00000004 B672            CPSID            I
+   20 00000006 4770            BX               LR
+   21 00000008         
+   22 00000008                 END
+Command Line: --debug --xref --cpu=Cortex-M0 --apcs=interwork --depend=.\obj\cp
+u_a.d -o.\obj\cpu_a.o -IC:\Keil\ARM\INC -IC:\Keil\ARM\INC\NXP\LPC11xx --predefi
+ne="__MICROLIB SETA 1" --list=.\list\cpu_a.lst src\UCOS2_PORT\cpu_a.asm
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 5 in file src\UCOS2_PORT\cpu_a.asm
+   Uses
+      None
+Comment: .text unused
+CPU_IntDis 00000004
+
+Symbol: CPU_IntDis
+   Definitions
+      At line 18 in file src\UCOS2_PORT\cpu_a.asm
+   Uses
+      At line 1 in file src\UCOS2_PORT\cpu_a.asm
+Comment: CPU_IntDis used once
+CPU_IntEn 00000000
+
+Symbol: CPU_IntEn
+   Definitions
+      At line 14 in file src\UCOS2_PORT\cpu_a.asm
+   Uses
+      At line 2 in file src\UCOS2_PORT\cpu_a.asm
+Comment: CPU_IntEn used once
+3 symbols
+328 symbols in table

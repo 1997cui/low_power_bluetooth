@@ -1,0 +1,11 @@
+.\obj\main.o: src\user\main.c
+.\obj\main.o: .\src\lib\inc\LPC11xx.h
+.\obj\main.o: .\src\lib\inc\core_cm0.h
+.\obj\main.o: C:\Keil\ARM\RV31\INC\stdint.h
+.\obj\main.o: .\src\lib\inc\system_LPC11xx.h
+.\obj\main.o: .\src\lib\inc\gpio.h
+.\obj\main.o: src\user\config.h
+.\obj\main.o: src\user\device_init.h
+.\obj\main.o: .\src\UCOS2_SOURCE\ucos_ii.h
+.\obj\main.o: .\src\UCOS2_SOURCE\os_cfg.h
+.\obj\main.o: .\src\UCOS2_PORT\os_cpu.h

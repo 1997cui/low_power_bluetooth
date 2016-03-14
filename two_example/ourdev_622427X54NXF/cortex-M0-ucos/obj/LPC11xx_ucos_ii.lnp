@@ -1,0 +1,5 @@
+--cpu Cortex-M0 ".\obj\device_init.o" ".\obj\main.o" ".\obj\startup_lpc11xx.o" ".\obj\system_lpc11xx.o" ".\obj\core_cm0.o" ".\obj\systick.o" ".\obj\gpio.o" ".\obj\os_cpu_c.o" ".\obj\cpu_a.o" ".\obj\os_cpu_a.o" ".\obj\os_core.o" ".\obj\os_flag.o" ".\obj\os_mbox.o" ".\obj\os_mem.o" ".\obj\os_mutex.o" ".\obj\os_q.o" ".\obj\os_sem.o" ".\obj\os_task.o" ".\obj\os_time.o" ".\obj\os_tmr.o" --library_type=microlib --feedback ".\obj\LPC11xx_ucos_ii.fed" 
+--strict --scatter ".\obj\LPC11xx_ucos_ii.sct" 
+--autoat --summary_stderr --info summarysizes --map --xref --callgraph --symbols 
+--info sizes --info totals --info unused --info veneers 
+ --list ".\list\LPC11xx_ucos_ii.map" -o ".\obj\LPC11xx_ucos_ii.axf"

@@ -1,0 +1,9 @@
+.\obj\device_init.o: src\user\device_init.c
+.\obj\device_init.o: .\src\lib\inc\LPC11xx.h
+.\obj\device_init.o: .\src\lib\inc\core_cm0.h
+.\obj\device_init.o: C:\Keil\ARM\RV31\INC\stdint.h
+.\obj\device_init.o: .\src\lib\inc\system_LPC11xx.h
+.\obj\device_init.o: .\src\lib\inc\gpio.h
+.\obj\device_init.o: src\user\config.h
+.\obj\device_init.o: src\user\device_init.h
+.\obj\device_init.o: src\user\systick.h
