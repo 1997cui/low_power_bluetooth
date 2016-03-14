@@ -1,10 +1,12 @@
-# �����͹���
+# 蓝牙低功耗
 
-## doc��ſ����ĵ�
-   doc/�µ�DA14580�ļ��д����һЩ�Ͽ��ṩ�����ϣ����������õ�pdf�������ߵȣ�һ������doc�ļ�����
+## doc存放开发文档
+   doc/下的DA14580文件夹存放有一些邢凯提供的资料，令：请曹神将有用的pdf（如休眠等）一并传至doc文件夹下
 
-## orig_src��Ųο���Դ����
+## orig_src存放参考用源代码
 
-Ŀǰorig_src��uCOS-III��uCOSƽ̨�޹صĴ��룬Micrium�Ǹ�����������
+目前orig_src里uCOS-III是uCOS平台无关的代码，Micrium是个完整的例子
 
-## src���Դ����
+## src存放源代码
+
+## two_example存放两个ucos ii移植m0的keil工程
