@@ -9,14 +9,17 @@
 \title{基于ARM架构的超低功耗OS可行性报告}
 \author{崔天一\ 曹焕琦\ 邓翔\ 李泽昌}
 \date{\today}
+\maketitle
+\thispagestyle{empty}
 \begin{abstract}
  本文简要论证了将uC/OS移植到蓝牙DA14580并实现低功耗且正常使用DA14580蓝牙协议栈的可行性，并描述了该种做法的创新点。本文依次介绍了uC/OS移植的一般步骤，外部中断的处理方法，休眠的实现方法。
 \end{abstract}
 
-\maketitle
-
+\newpage
+\thispagestyle{empty}
 \tableofcontents
 \newpage
+\setcounter{page}{1}
 \section{uC/OS II的移植\cite{001}}
 \subsection{移植条件}
 要移植uC/OS，处理器需满足以下条件。
