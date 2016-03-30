@@ -1,9 +1,2 @@
-*.aux
-*.bbl
-*.blg
-*.lof
-*.log
-*.lot
-*.out
-*.toc
-*.xdv
+project/*
+!project/low_power_bluetooth.uvprojx
