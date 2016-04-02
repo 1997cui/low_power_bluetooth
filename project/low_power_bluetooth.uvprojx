@@ -7,7 +7,7 @@
 
   <Targets>
     <Target>
-      <TargetName>Target 1</TargetName>
+      <TargetName>low_power_bluetooth</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <pCCUsed>5060061::V5.06 update 1 (build 61)::ARMCC</pCCUsed>
@@ -128,7 +128,7 @@
         </DebugOption>
         <Utilities>
           <Flash1>
-            <UseTargetDll>1</UseTargetDll>
+            <UseTargetDll>0</UseTargetDll>
             <UseExternalTool>1</UseExternalTool>
             <RunIndependent>0</RunIndependent>
             <UpdateFlashBeforeDebugging>1</UpdateFlashBeforeDebugging>
@@ -362,7 +362,7 @@
             <TextAddressRange>0x00000000</TextAddressRange>
             <DataAddressRange>0x20000000</DataAddressRange>
             <pXoBase></pXoBase>
-            <ScatterFile>.\board_rel\peripheral_examples.sct</ScatterFile>
+            <ScatterFile>..\board_rel\peripheral_examples.sct</ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
             <Misc></Misc>
