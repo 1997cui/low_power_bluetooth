@@ -26,9 +26,8 @@
 
 #define  OS_CPU_GLOBALS
 #include <ucos_ii.h>
-#include <core_cm0.h>
+#include "ARMCM0.h"
 
-#include "rwip.h"
 #include "global_io.h"
 #include "systick.h"
 
