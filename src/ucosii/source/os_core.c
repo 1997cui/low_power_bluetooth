@@ -1775,7 +1775,6 @@ void  OS_TaskIdle (void *p_arg)
     p_arg = p_arg;                               /* Prevent compiler warning for not using 'p_arg'     */
     for (;;) {
         OS_ENTER_CRITICAL();
-		__wfi();
         OSIdleCtr++;
         OS_EXIT_CRITICAL();
         OSTaskIdleHook();                        /* Call user definable HOOK                           */

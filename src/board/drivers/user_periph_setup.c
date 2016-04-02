@@ -13,12 +13,15 @@
  * <bluetooth.support@diasemi.com> and contributors.
  *
  ****************************************************************************************
- */ 
+ */
+ 
+#include <core_cm0.h>
+ 
 #include "global_io.h"
 #include "gpio.h"
-#include <core_cm0.h>
+#include "oled.h"
 #include "user_periph_setup.h"
-  
+
  /**
  ****************************************************************************************
  * @brief Enable pad's and peripheral clocks assuming that peripherals' power domain is down.
@@ -44,4 +47,6 @@ void periph_init(void)
     GPIO_ConfigurePin(UART2_GPIO_PORT, UART2_RX_PIN, INPUT, PID_UART2_RX, false);
     // Init LED
     GPIO_ConfigurePin(LED_PORT, LED_PIN, OUTPUT, PID_GPIO, false);
+	
+	LCD_Init();
 }

@@ -26,6 +26,11 @@
 
 #define  OS_CPU_GLOBALS
 #include <ucos_ii.h>
+#include <core_cm0.h>
+
+#include "rwip.h"
+#include "global_io.h"
+#include "systick.h"
 
 /*
 *********************************************************************************************************
@@ -170,6 +175,43 @@ void  OSTaskIdleHook (void)
 #if OS_APP_HOOKS_EN > 0u
     App_TaskIdleHook();
 #endif
+
+#if OS_CRITICAL_METHOD == 3u                     /* Allocate storage for CPU status register           */
+    OS_CPU_SR  cpu_sr = 0u;
+#endif
+	
+	OS_ENTER_CRITICAL();
+
+	/* NOT AVAILABLE YET! TODO: FIX RWIP.
+	// if app has turned sleep off, rwip_sleep() will act accordingly
+	// time from rwip_sleep() to WFI() must be kept as short as possible!
+	sleep_mode_t sleep_mode = rwip_sleep();
+
+	// BLE is sleeping ==> app defines the mode
+	if (sleep_mode == mode_sleeping)
+	{
+		SetBits16(PMU_CTRL_REG, RADIO_SLEEP, 1); // turn off radio
+		
+		SCB->SCR |= 1<<2; // enable sleepdeep mode bit in System Control Register. (SCR[2]=SLEEPDEEP)
+		
+		SetBits16(SYS_CTRL_REG, PAD_LATCH_EN, 0);           // activate PAD latches.
+		SetBits16(PMU_CTRL_REG, PERIPH_SLEEP, 1);           // turn off peripheral power domain.
+		
+		SetBits16(SYS_CTRL_REG, RET_SYSRAM, 1);         // retain System RAM.
+		SetBits16(SYS_CTRL_REG, OTP_COPY, 0);           // disable OTP copy.
+		
+		// Set the 16 MHz RC-oscillator to stop state.
+		SetBits16(CLK_16M_REG, XTAL16_BIAS_SH_ENABLE, 0);
+		// Go to sleep, wait for an interrupt to wake-up.
+		__wfi();
+		// reset SCR[2]=SLEEPDEEP bit else the mode=idle WFI will cause a deep sleep instead of a processor halt.
+		SCB->SCR &= ~(1<<2);
+	}
+	else
+	*/
+		__wfi();
+	
+	OS_EXIT_CRITICAL();
 }
 #endif
 
@@ -388,18 +430,6 @@ void  OS_CPU_SysTickHandler (void)
 
 void  OS_CPU_SysTickInit (INT32U  cnts)
 {
-    INT32U  prio;
-    
-    
-    OS_CPU_CM0_NVIC_ST_RELOAD = cnts - 1u;
-    
-    prio  = OS_CPU_CM0_NVIC_PRIO_ST;
-    prio &= ~(OS_CPU_CM0_NVIC_PRIO_MIN);
-    prio |= OS_CPU_CM0_NVIC_PRIO_MIN;
-                                                 /* Set prio of SysTick handler to min prio.           */
-    OS_CPU_CM0_NVIC_PRIO_ST   = prio;
-                                                 /* Enable timer.                                      */
-    OS_CPU_CM0_NVIC_ST_CTRL  |= OS_CPU_CM0_NVIC_ST_CTRL_CLK_SRC | OS_CPU_CM0_NVIC_ST_CTRL_ENABLE;
-                                                 /* Enable timer interrupt.                            */
-    OS_CPU_CM0_NVIC_ST_CTRL  |= OS_CPU_CM0_NVIC_ST_CTRL_INTEN;
+    systick_register_callback(OS_CPU_SysTickHandler);
+    systick_start(cnts, 1);
 }

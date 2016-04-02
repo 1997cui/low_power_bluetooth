@@ -332,7 +332,7 @@
               <MiscControls>--thumb</MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>..\include;..\include\board;..\include\board\drivers;..\include\ucosii</IncludePath>
+              <IncludePath>..\include;..\include\board;..\include\board\drivers;..\include\ucosii;..\include\main</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -480,11 +480,6 @@
               <FileType>1</FileType>
               <FilePath>..\src\board\drivers\systick.c</FilePath>
             </File>
-            <File>
-              <FileName>user_periph_setup.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\board\drivers\user_periph_setup.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -499,6 +494,21 @@
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\main\main.c</FilePath>
+            </File>
+            <File>
+              <FileName>init.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\main\init.c</FilePath>
+            </File>
+            <File>
+              <FileName>lcd_show.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\main\lcd_show.c</FilePath>
+            </File>
+            <File>
+              <FileName>led_blink.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\main\led_blink.c</FilePath>
             </File>
           </Files>
         </Group>
