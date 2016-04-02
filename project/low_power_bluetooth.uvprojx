@@ -7,7 +7,7 @@
 
   <Targets>
     <Target>
-      <TargetName>Target 1</TargetName>
+      <TargetName>low_power_bluetooth</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <pCCUsed>5060061::V5.06 update 1 (build 61)::ARMCC</pCCUsed>
@@ -128,7 +128,7 @@
         </DebugOption>
         <Utilities>
           <Flash1>
-            <UseTargetDll>1</UseTargetDll>
+            <UseTargetDll>0</UseTargetDll>
             <UseExternalTool>1</UseExternalTool>
             <RunIndependent>0</RunIndependent>
             <UpdateFlashBeforeDebugging>1</UpdateFlashBeforeDebugging>
@@ -332,7 +332,7 @@
               <MiscControls>--thumb</MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath>.\include;.\include\board;.\include\board\drivers;.\include\ucosii</IncludePath>
+              <IncludePath>..\include;..\include\board;..\include\board\drivers;..\include\ucosii</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -362,7 +362,7 @@
             <TextAddressRange>0x00000000</TextAddressRange>
             <DataAddressRange>0x20000000</DataAddressRange>
             <pXoBase></pXoBase>
-            <ScatterFile>.\board_rel\peripheral_examples.sct</ScatterFile>
+            <ScatterFile>..\board_rel\peripheral_examples.sct</ScatterFile>
             <IncludeLibs></IncludeLibs>
             <IncludeLibsPath></IncludeLibsPath>
             <Misc></Misc>
@@ -378,17 +378,17 @@
             <File>
               <FileName>boot_vectors.s</FileName>
               <FileType>2</FileType>
-              <FilePath>.\src\startup\boot_vectors.s</FilePath>
+              <FilePath>..\src\startup\boot_vectors.s</FilePath>
             </File>
             <File>
               <FileName>per_ex_hard_fault.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\src\startup\per_ex_hard_fault.c</FilePath>
+              <FilePath>..\src\startup\per_ex_hard_fault.c</FilePath>
             </File>
             <File>
               <FileName>system_ARMCM0.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\src\startup\system_ARMCM0.c</FilePath>
+              <FilePath>..\src\startup\system_ARMCM0.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -398,67 +398,67 @@
             <File>
               <FileName>os_cpu_a.asm</FileName>
               <FileType>2</FileType>
-              <FilePath>.\src\ucosii\ports\os_cpu_a.asm</FilePath>
+              <FilePath>..\src\ucosii\ports\os_cpu_a.asm</FilePath>
             </File>
             <File>
               <FileName>os_cpu_c.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\src\ucosii\ports\os_cpu_c.c</FilePath>
+              <FilePath>..\src\ucosii\ports\os_cpu_c.c</FilePath>
             </File>
             <File>
               <FileName>os_dbg.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\src\ucosii\ports\os_dbg.c</FilePath>
+              <FilePath>..\src\ucosii\ports\os_dbg.c</FilePath>
             </File>
             <File>
               <FileName>os_core.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\src\ucosii\source\os_core.c</FilePath>
+              <FilePath>..\src\ucosii\source\os_core.c</FilePath>
             </File>
             <File>
               <FileName>os_flag.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\src\ucosii\source\os_flag.c</FilePath>
+              <FilePath>..\src\ucosii\source\os_flag.c</FilePath>
             </File>
             <File>
               <FileName>os_mbox.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\src\ucosii\source\os_mbox.c</FilePath>
+              <FilePath>..\src\ucosii\source\os_mbox.c</FilePath>
             </File>
             <File>
               <FileName>os_mem.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\src\ucosii\source\os_mem.c</FilePath>
+              <FilePath>..\src\ucosii\source\os_mem.c</FilePath>
             </File>
             <File>
               <FileName>os_mutex.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\src\ucosii\source\os_mutex.c</FilePath>
+              <FilePath>..\src\ucosii\source\os_mutex.c</FilePath>
             </File>
             <File>
               <FileName>os_q.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\src\ucosii\source\os_q.c</FilePath>
+              <FilePath>..\src\ucosii\source\os_q.c</FilePath>
             </File>
             <File>
               <FileName>os_sem.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\src\ucosii\source\os_sem.c</FilePath>
+              <FilePath>..\src\ucosii\source\os_sem.c</FilePath>
             </File>
             <File>
               <FileName>os_task.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\src\ucosii\source\os_task.c</FilePath>
+              <FilePath>..\src\ucosii\source\os_task.c</FilePath>
             </File>
             <File>
               <FileName>os_time.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\src\ucosii\source\os_time.c</FilePath>
+              <FilePath>..\src\ucosii\source\os_time.c</FilePath>
             </File>
             <File>
               <FileName>os_tmr.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\src\ucosii\source\os_tmr.c</FilePath>
+              <FilePath>..\src\ucosii\source\os_tmr.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -468,22 +468,22 @@
             <File>
               <FileName>gpio.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\src\board\drivers\gpio.c</FilePath>
+              <FilePath>..\src\board\drivers\gpio.c</FilePath>
             </File>
             <File>
               <FileName>oled.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\src\board\drivers\oled.c</FilePath>
+              <FilePath>..\src\board\drivers\oled.c</FilePath>
             </File>
             <File>
               <FileName>systick.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\src\board\drivers\systick.c</FilePath>
+              <FilePath>..\src\board\drivers\systick.c</FilePath>
             </File>
             <File>
               <FileName>user_periph_setup.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\src\board\drivers\user_periph_setup.c</FilePath>
+              <FilePath>..\src\board\drivers\user_periph_setup.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -493,12 +493,12 @@
             <File>
               <FileName>app_hooks.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\src\main\app_hooks.c</FilePath>
+              <FilePath>..\src\main\app_hooks.c</FilePath>
             </File>
             <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\src\main\main.c</FilePath>
+              <FilePath>..\src\main\main.c</FilePath>
             </File>
           </Files>
         </Group>
