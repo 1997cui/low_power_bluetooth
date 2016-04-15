@@ -480,6 +480,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\board\drivers\systick.c</FilePath>
             </File>
+            <File>
+              <FileName>rwip.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\board\rwip\src\rwip.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
