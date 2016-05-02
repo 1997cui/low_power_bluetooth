@@ -1,2 +1,3 @@
 project/*
 !project/low_power_bluetooth.uvprojx
+!project/unused.txt
