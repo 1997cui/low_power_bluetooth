@@ -1,4 +1,4 @@
-;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Mon May 02 14:44:37 2016
+;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Mon May 02 15:56:14 2016
 ;VERSION 0.2
 ;FILE adc.o
 adc_calibrate <= USED 0
@@ -94,6 +94,7 @@ schedule_while_ble_on <= USED 0
 arch_ble_ext_wakeup_off <= USED 0
 arch_ble_ext_wakeup_on <= USED 0
 arch_force_active_mode <= USED 0
+arch_get_sleep_mode <= USED 0
 arch_last_rwble_evt_get <= USED 0
 arch_restore_sleep_mode <= USED 0
 ;FILE arch_system.o
@@ -121,14 +122,12 @@ battery_get_lvl <= USED 0
 ;FILE diss.o
 ;FILE gapm_util.obj
 ;FILE gpio.o
-GPIO_ConfigurePin <= USED 0
 GPIO_ConfigurePinPower <= USED 0
 GPIO_EnableIRQ <= USED 0
 GPIO_GetIRQInputLevel <= USED 0
 GPIO_GetPinStatus <= USED 0
 GPIO_RegisterCallback <= USED 0
 GPIO_SetIRQInputLevel <= USED 0
-GPIO_SetPinFunction <= USED 0
 ;FILE hardfault_handler.o
 ;FILE i2c_eeprom.o
 i2c_eeprom_init <= USED 0
@@ -268,7 +267,6 @@ systick_value <= USED 0
 systick_wait <= USED 0
 ;FILE trng.o
 ;FILE user_periph_setup.o
-set_pad_functions <= USED 0
 ;FILE user_profile.o
 ;FILE wkupct_quadec.o
 quad_decoder_disable_irq <= USED 0

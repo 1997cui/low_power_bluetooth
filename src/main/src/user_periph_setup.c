@@ -34,12 +34,7 @@ void GPIO_reservations(void)
 * Globally reserved GPIOs reservation
 */
 
-/*
-* Application specific GPIOs reservation. Used only in Development mode (#if DEVELOPMENT_DEBUG)
-
-i.e.
-    RESERVE_GPIO(DESCRIPTIVE_NAME, GPIO_PORT_0, GPIO_PIN_1, PID_GPIO);    //Reserve P_01 as Generic Purpose I/O
-*/
+	RESERVE_GPIO(GPIO_LED, GPIO_LED_PORT, GPIO_LED_PIN, PID_GPIO);
 
 #ifdef CFG_PRINTF_UART2
     RESERVE_GPIO(UART2_TX, UART1_TX_GPIO_PORT, UART1_TX_GPIO_PIN, PID_UART2_TX);
@@ -55,11 +50,7 @@ void set_pad_functions(void)        // set gpio port function mode
     GPIO_ConfigurePin(UART1_RX_GPIO_PORT, UART1_RX_GPIO_PIN, INPUT, PID_UART2_RX, false);
 #endif
 
-/*
-* Configure application ports.
-i.e.
-    GPIO_ConfigurePin( GPIO_PORT_0, GPIO_PIN_1, OUTPUT, PID_GPIO, false ); // Set P_01 as Generic purpose Output
-*/
+    GPIO_ConfigurePin(GPIO_LED_PORT, GPIO_LED_PIN, OUTPUT, PID_GPIO, false);
 }
 
 void periph_init(void)

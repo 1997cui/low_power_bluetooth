@@ -826,12 +826,12 @@ uint8_t check_sys_startup_period(void)
         else // After 2 seconds system can sleep
         {
             sys_startup_flag = false;
-            if ( (arch_get_sleep_mode() == 2) || (arch_get_sleep_mode() == 1) )
-            {
-                wdg_freeze();                           // Stop WDOG until debugger is removed
-                while ((GetWord16(SYS_STAT_REG) & DBG_IS_UP) == DBG_IS_UP) {};
-                SetBits16(SYS_CTRL_REG, DEBUGGER_ENABLE, 0);    // close debugger
-            }
+            //if ( (arch_get_sleep_mode() == 2) || (arch_get_sleep_mode() == 1) )
+            //{
+            //    wdg_freeze();                           // Stop WDOG until debugger is removed
+            //    while ((GetWord16(SYS_STAT_REG) & DBG_IS_UP) == DBG_IS_UP) {};
+            //    SetBits16(SYS_CTRL_REG, DEBUGGER_ENABLE, 0);    // close debugger
+            //}
 
             if(USE_WDOG)
                 SetWord16(RESET_FREEZE_REG, FRZ_WDOG);  // Start WDOG

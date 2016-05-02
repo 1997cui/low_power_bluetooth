@@ -12,7 +12,7 @@ void ble_service_task(void * p)
 	
 	while (true)
 	{
-		schedule_while_ble_on();
+		//schedule_while_ble_on();
 		OSQPend(ble_service_queue, 100, &err);
 	}
 }
