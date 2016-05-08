@@ -26,8 +26,12 @@
 #include "user_profile.h"
 #include "app_prf_types.h"
 
+#include "user_spsc.h"
+#include "user_spsc_task.h"
+#include "user_sps_host.h"
+
 static const struct app_callbacks user_app_callbacks = {
-    .app_on_connection              = user_app_connection,
+    /*.app_on_connection              = user_app_connection,
     .app_on_disconnect              = user_app_disconnect,
     .app_on_update_params_rejected  = NULL,
     .app_on_update_params_complete  = NULL,
@@ -47,16 +51,51 @@ static const struct app_callbacks user_app_callbacks = {
     .app_on_encrypt_ind             = NULL,
     .app_on_mitm_passcode_req       = NULL,
     .app_on_encrypt_req_ind         = NULL,
-    #endif // (BLE_APP_SEC)
+    #endif // (BLE_APP_SEC)*/
+		
+		/* add by ctyi
+		   migrate from another project
+		*/
+		
+		.app_on_connection              = user_on_connection,
+    .app_on_disconnect              = user_on_disconnect,
+    .app_on_update_params_rejected  = NULL,
+    .app_on_update_params_complete  = NULL,
+    .app_on_set_dev_config_complete = user_on_set_dev_config_complete,
+    .app_on_adv_undirect_complete   = NULL,
+    .app_on_adv_direct_complete     = NULL,
+    .app_on_db_init_complete        = NULL,
+    .app_on_scanning_completed      = user_on_scanning_completed,
+    .app_on_adv_report_ind          = user_on_adv_report_ind,
+    .app_on_connect_failed          = user_on_connect_failed,
+    .app_on_pairing_request         = default_app_on_pairing_request,
+    .app_on_tk_exch_nomitm          = default_app_on_tk_exch_nomitm,
+    .app_on_irk_exch                = NULL,
+    .app_on_csrk_exch               = default_app_on_csrk_exch,
+    .app_on_ltk_exch                = default_app_on_ltk_exch,
+    .app_on_pairing_succeded        = NULL,
+    .app_on_encrypt_ind             = NULL,
+    .app_on_mitm_passcode_req       = NULL,
+    .app_on_encrypt_req_ind         = default_app_on_encrypt_req_ind,
 };
 
 static const catch_rest_event_func_t app_process_catch_rest_cb = (catch_rest_event_func_t)user_catch_rest_hndl;
 
 static const  struct arch_main_loop_callbacks user_app_main_loop_callbacks = {
-    .app_on_init            = user_app_init,
+    /*.app_on_init            = user_app_init,
     .app_on_ble_powered     = NULL,
     .app_on_sytem_powered   = NULL,
     .app_before_sleep       = NULL,
+    .app_validate_sleep     = NULL,
+    .app_going_to_sleep     = NULL,
+    .app_resume_from_sleep  = NULL,*/
+	
+	   /* add by ctyi 
+	      sps callback code */
+	  .app_on_init            = user_on_init,
+    .app_on_ble_powered     = NULL,
+    .app_on_sytem_powered   = user_on_system_powered,
+    .app_before_sleep       = user_before_sleep,
     .app_validate_sleep     = NULL,
     .app_going_to_sleep     = NULL,
     .app_resume_from_sleep  = NULL,
@@ -71,8 +110,20 @@ static const struct default_app_operations user_default_app_operations = {
 //for SIG profiles that do not have this function already implemented in the SDK
 //or if you want to override the functionality. Check the prf_func array in the SDK
 //for your reference of which profiles are supported.
+/*static const struct prf_func_callbacks user_prf_funcs[] =
+{
+    {TASK_NONE,    NULL, NULL}   // DO NOT MOVE. Must always be last
+};*/
+
+//Add by ctyi
+//migrate from another project from DX 
+//add sps prf declare
+
 static const struct prf_func_callbacks user_prf_funcs[] =
 {
+#if (BLE_SPS_CLIENT)
+    {TASK_SPS_CLIENT, NULL, user_sps_enable},
+#endif //BLE_SPS_SERVER
     {TASK_NONE,    NULL, NULL}   // DO NOT MOVE. Must always be last
 };
 

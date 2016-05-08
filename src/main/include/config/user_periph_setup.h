@@ -154,6 +154,12 @@
         #define GPIO_LED_PIN      GPIO_PIN_7
     #endif
 	
+	
+	
+	
+	//add by ctyi
+	//add uart rate
+#define CFG_UART_SPS_BAUDRATE       UART_BAUDRATE_115K2
 
 /*
  * FUNCTION DECLARATIONS
