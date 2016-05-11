@@ -1,8 +1,7 @@
 
 #include "tasks.h"
 
-OS_STK init_stack[MaxStkSize];
-void *ble_service_queue_space[BLE_SERVICE_QUEUE_LENGTH];
+static void *ble_service_queue_space[BLE_SERVICE_QUEUE_LENGTH];
 
 void init_task(void * p)
 {
