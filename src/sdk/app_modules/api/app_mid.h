@@ -227,7 +227,7 @@ __INLINE  void app_param_update_msg_send(struct gapc_param_update_cmd* cmd)
 __INLINE  struct gapm_start_connection_cmd* app_connect_start_msg_create(void)
 {
  struct gapm_start_connection_cmd* cmd=KE_MSG_ALLOC_DYN(GAPM_START_CONNECTION_CMD , TASK_GAPM, TASK_APP,
-                                                gapm_start_connection_cmd, sizeof(struct gap_bdaddr));
+                                                gapm_start_connection_cmd, CFG_MAX_CONNECTIONS * sizeof(struct gap_bdaddr));
  return(cmd);
 }
 

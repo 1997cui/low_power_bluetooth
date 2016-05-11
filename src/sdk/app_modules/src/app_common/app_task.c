@@ -180,7 +180,7 @@ int gapm_cmp_evt_handler(ke_msg_id_t const msgid,
         case GAPM_SCAN_ACTIVE:
         case GAPM_SCAN_PASSIVE:
         {
-            EXECUTE_CALLBACK_VOID(app_on_scanning_completed);
+            EXECUTE_CALLBACK_PARAM(app_on_scanning_completed, param->status);
         }
         break;
         

@@ -51,8 +51,8 @@ i.e.
 #include "app_dis_task.h"
 #endif
 *****************************************************************************/
-#include "user_spsc.h"
-#include "user_spsc_task.h"
+#include "user_spss.h"
+#include "user_spss_task.h"
 /*
  * TYPE DEFINITIONS
  ****************************************************************************************
@@ -76,16 +76,6 @@ i.e.
 void user_process_catch(ke_msg_id_t const msgid, void const *param,
                                          ke_task_id_t const dest_id, ke_task_id_t const src_id);
 
-/**
- ****************************************************************************************
- * @brief Handles update parameter event from the GAP.
- ****************************************************************************************
- */
-int gapc_param_update_req_ind_handler(ke_msg_id_t const msgid,
-                                      struct gapc_param_update_req_ind const *param,
-                                      ke_task_id_t const dest_id,
-                                      ke_task_id_t const src_id);
-
 /*
  * APP CALLBACKS
  ****************************************************************************************
@@ -103,27 +93,6 @@ void user_on_connection(uint8_t connection_idx, struct gapc_connection_req_ind c
  ****************************************************************************************
  */
 void user_on_disconnect( struct gapc_disconnect_ind const *param );
-
-/**
- ****************************************************************************************
- * @brief Called upon device cofiguration complete message
- ****************************************************************************************
- */
-void user_on_set_dev_config_complete( void );
-
-/**
- ****************************************************************************************
- * @brief Called upon scan completion
- ****************************************************************************************
- */
-void user_on_scanning_completed (uint8_t status);
-
-/**
- ****************************************************************************************
- * @brief Handles advertise reports
- ****************************************************************************************
- */
-void user_on_adv_report_ind(struct gapm_adv_report_ind const * param);
 
 /**
  ****************************************************************************************

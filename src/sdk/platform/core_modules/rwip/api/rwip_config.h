@@ -223,6 +223,10 @@
 
         /// Max advertising reports before sending the info to the host
         #define BLE_ADV_REPORTS_MAX         1
+
+        /// Use of security manager block
+        #define RW_BLE_USE_CRYPT  CFG_SECURITY_ON
+
     #endif //defined(CFG_BLE)
 
     /// Accelerometer Application

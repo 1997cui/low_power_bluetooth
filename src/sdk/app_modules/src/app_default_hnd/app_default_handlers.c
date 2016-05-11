@@ -43,16 +43,13 @@
 #include "user_config.h"
 
 #if BLE_CUSTOM_SERVER
-    #include "user_custs_config.h"
+#include "user_custs_config.h"
 #endif
-
-
-
 
 /**
  ****************************************************************************************
  * @brief The advertise operation used by the rest of default handlers.
- * @return None.
+ * @return void
  ****************************************************************************************
  */
 void default_advertise_operation(void)
@@ -61,14 +58,6 @@ void default_advertise_operation(void)
             app_easy_gap_undirected_advertise_start();
         else if (user_default_hnd_conf.adv_scenario==DEF_ADV_WITH_TIMEOUT)
             app_easy_gap_undirected_advertise_with_timeout_start(user_default_hnd_conf.advertise_period,NULL);
-}
-
-static void default_advertise_stop_operation(void)
-{
-        if (user_default_hnd_conf.adv_scenario==DEF_ADV_FOREVER)
-            app_easy_gap_advertise_stop();
-        else if (user_default_hnd_conf.adv_scenario==DEF_ADV_WITH_TIMEOUT)
-            app_easy_gap_advertise_with_timeout_stop( );
 }
 
 void default_app_on_init(void)
@@ -104,32 +93,29 @@ void default_app_on_connection(uint8_t connection_idx, struct gapc_connection_re
 {
     if (app_env[connection_idx].conidx != GAP_INVALID_CONIDX)
     {
-
-        if (user_default_hnd_conf.adv_scenario==DEF_ADV_WITH_TIMEOUT)
-            app_easy_gap_advertise_with_timeout_stop( );
-        
-        default_advertise_stop_operation();
-
-        app_prf_enable (param->conhdl);
-        if ((user_default_hnd_conf.security_request_scenario==DEF_SEC_REQ_ON_CONNECT) && (BLE_APP_SEC))
+        if (user_default_hnd_conf.adv_scenario == DEF_ADV_WITH_TIMEOUT)
         {
-             app_easy_security_request(connection_idx);
+            app_easy_gap_advertise_with_timeout_stop();
+        }
+
+        app_prf_enable(param->conhdl);
+        
+        if ((user_default_hnd_conf.security_request_scenario == DEF_SEC_REQ_ON_CONNECT) && (BLE_APP_SEC))
+        {
+            app_easy_security_request(connection_idx);
         }
     }
     else
     {
-        // No connection has been establish, restart advertising
+        // No connection has been established, restart advertising
         EXECUTE_DEFAULT_OPERATION_VOID(default_operation_adv);
     }
-    
     return;
-
 }
 
 void default_app_on_disconnect( struct gapc_disconnect_ind const *param ){
     // Restart Advertising
-
-    EXECUTE_DEFAULT_OPERATION_VOID(default_operation_adv);   
+    EXECUTE_DEFAULT_OPERATION_VOID(default_operation_adv);
 }
 
 void default_app_on_set_dev_config_complete( void )

@@ -18,7 +18,6 @@
  ****************************************************************************************
  */
 
-
 /*
  * INCLUDE FILES
  ****************************************************************************************
@@ -26,7 +25,7 @@
 
 #include "rwip_config.h"        // SW configuration
 
-#if BLE_APP_PRESENT
+#if (BLE_APP_PRESENT)
     #include "app_task.h"           // Application task Definition
     #include "app.h"                // Application Definition
     #include "gapm_task.h"          // GAP Manager Task API
@@ -45,6 +44,7 @@
     #include "app_mid.h"
     #include "ke_mem.h"
     #include "app_adv_data.h"
+    #include "llm.h"
     #if BLE_CUSTOM_SERVER
         #include "user_custs_config.h"
     #endif
@@ -73,27 +73,27 @@ const struct prf_func_callbacks prf_funcs[] =
     #if BLE_PROX_REPORTER
     {TASK_PROXR,     app_proxr_create_db, app_proxr_enable},
     #endif
-    
+
     #if BLE_BAS_SERVER
     {TASK_BASS,      app_bass_create_db, app_bass_enable},
     #endif
-    
+
     #if BLE_FINDME_TARGET
     {TASK_FINDT,     NULL, app_findt_enable},
     #endif
-    
+
     #if BLE_FINDME_LOCATOR
     {TASK_FINDL,     NULL, app_findl_enable},
     #endif
-    
+
     #if BLE_DIS_SERVER
     {TASK_DISS,      app_diss_create_db, app_diss_enable},
     #endif
-    
+
     #if BLE_SPOTA_RECEIVER
     {TASK_SPOTAR,    app_spotar_create_db, app_spotar_enable},
     #endif
-    
+
     {TASK_NONE,    NULL, NULL},   // DO NOT MOVE. Mast always be last
 };
 
@@ -110,154 +110,17 @@ static const struct ke_task_desc TASK_DESC_APP = {NULL,
                                                   APP_STATE_MAX,
                                                   APP_IDX_MAX};
 
-static struct gapc_param_update_cmd *param_update_cmd [APP_EASY_GAP_MAX_CONNECTION] __attribute__((section("retention_mem_area0"),zero_init)); //@RETENTION MEMORY
+static struct gapc_param_update_cmd *param_update_cmd[APP_EASY_GAP_MAX_CONNECTION] __attribute__((section("retention_mem_area0"),zero_init)); // @RETENTION MEMORY
 
-static struct gapm_set_dev_config_cmd *set_dev_config_cmd __attribute__((section("retention_mem_area0"),zero_init));
+static struct gapm_set_dev_config_cmd *set_dev_config_cmd                           __attribute__((section("retention_mem_area0"),zero_init)); // @RETENTION MEMORY
 
-static struct gapm_start_advertise_cmd *adv_cmd __attribute__((section("retention_mem_area0"),zero_init));
+static struct gapm_start_advertise_cmd *adv_cmd                                     __attribute__((section("retention_mem_area0"),zero_init)); // @RETENTION MEMORY
 
-static struct gapm_start_connection_cmd *start_connection_cmd __attribute__((section("retention_mem_area0"),zero_init));
+static struct gapm_start_connection_cmd *start_connection_cmd                       __attribute__((section("retention_mem_area0"),zero_init)); // @RETENTION MEMORY
 
-static timer_hnd adv_timer_id __attribute__((section("retention_mem_area0"),zero_init)); //@RETENTION MEMORY
+static timer_hnd adv_timer_id                                                       __attribute__((section("retention_mem_area0"),zero_init)); // @RETENTION MEMORY
 
-static void (*adv_timeout_callback) (void) __attribute__((section("retention_mem_area0"),zero_init)); //@RETENTION MEMORY
-
-//The following structures are only used as default options for the easy API 
-//if the user does not define anything.                                                  
-static const struct gapm_start_advertise_cmd default_undir_adv_cmd = {
-    .op = {
-        .code = GAPM_ADV_UNDIRECT,
-        .addr_src = GAPM_PUBLIC_ADDR,
-    },
-    .intv_min    = MS_TO_DOUBLESLOTS(200),
-    .intv_max    = MS_TO_DOUBLESLOTS(200),
-    .channel_map = 0x7,
-    .info={
-        .host = {
-            .mode           = GAP_GEN_DISCOVERABLE,
-            .adv_data_len = 19,
-            .adv_data = "\x09"\
-                        ADV_TYPE_COMPLETE_LIST_16BIT_SERVICE_IDS\
-                        ADV_UUID_LINK_LOSS_SERVICE\
-                        ADV_UUID_TX_POWER_SERVICE\
-                        ADV_UUID_SPOTAR_SERVICE\
-                        "\0x08"\
-                        ADV_TYPE_COMPLETE_LOCAL_NAME\
-                        "DA1458x",
-            .scan_rsp_data_len = 10,
-            .scan_rsp_data = "\x0a"\
-                               ADV_TYPE_MANUFACTURER_SPECIFIC_DATA\
-                               ADV_DIALOG_MANUFACTURER_CODE\
-                               "DLG-BLE",
-        }
-    }
-};
-
-static const struct gapm_start_advertise_cmd default_non_connectable_adv_cmd = {
-    .op = {
-        .code = ADV_NON_CONN,
-        .addr_src = GAPM_PUBLIC_ADDR,
-    },
-    .intv_min    = MS_TO_DOUBLESLOTS(200),
-    .intv_max    = MS_TO_DOUBLESLOTS(200),
-    .channel_map = 0x7,
-    .info = {
-        .host= {
-            .mode           = GAP_GEN_DISCOVERABLE,
-            .adv_data_len = 19,
-            .adv_data = "\x09"\
-                        ADV_TYPE_COMPLETE_LIST_16BIT_SERVICE_IDS\
-                        ADV_UUID_LINK_LOSS_SERVICE\
-                        ADV_UUID_IMMEDIATE_ALERT_SERVICE\
-                        ADV_UUID_SPOTAR_SERVICE\
-                        "\0x08"\
-                        ADV_TYPE_COMPLETE_LOCAL_NAME\
-                        "DA1458x",
-            .scan_rsp_data_len = 0,
-            .scan_rsp_data = "",
-        }
-    }
-};
-
-static const struct gapm_start_advertise_cmd default_dir_adv_cmd = {
-    .op = {
-        .code=GAPM_ADV_DIRECT,
-        .addr_src=GAPM_PUBLIC_ADDR,
-    },
-    .intv_min    = MS_TO_DOUBLESLOTS(200),
-    .intv_max    = MS_TO_DOUBLESLOTS(200),
-    .channel_map = 0x7,
-    .info = {
-        .direct= {
-            .addr= {
-                .addr = {0x0,0x1,0x2,0x3,0x4,0x5}
-            },
-            /// Address type of the device 0=public/1=private random
-            .addr_type = 0,
-          }
-    }
-};
-
-/// Perform update of connection parameters command
-static const struct gapc_param_update_cmd default_param_update_cmd = {
-    .operation = GAPC_UPDATE_PARAMS,
-    #ifndef __DA14581__
-    .params = {
-    #endif
-        .intv_min = MS_TO_DOUBLESLOTS(10),            /// Connection interval minimum
-        .intv_max = MS_TO_DOUBLESLOTS(20),           /// Connection interval maximum
-        .latency = 0,             /// Latency
-        .time_out = MS_TO_TIMERUNITS(1000),          /// Supervision timeout
-    #ifndef __DA14581__
-    },
-    #else
-    .ce_len_min = MS_TO_DOUBLESLOTS(0),          /// Minimum Connection Event Duration 
-    .ce_len_max = MS_TO_DOUBLESLOTS(0)           /// Maximum Connection Event Duration 
-#endif
-};
-
-static const struct gapm_start_connection_cmd default_start_connection_cmd =
-{
-    .op = {
-        .code = GAPM_CONNECTION_DIRECT,
-        .addr_src = GAPM_PUBLIC_ADDR,
-        .state = 0,
-        .renew_dur = 100,
-        .addr = 0,
-    },
-    .scan_interval = 0,
-    .scan_window = 0,
-    .con_intv_min = 0,
-    .con_intv_max = 0,
-    .con_latency = 0,
-    .superv_to = 0,
-    .ce_len_min = 0,
-    .ce_len_max = 0,
-    .nb_peers = 0,
-};
-
-static const struct gapm_set_dev_config_cmd default_set_dev_config =
-{
-    .operation = GAPM_SET_DEV_CONFIG,
-    .role = GAP_PERIPHERAL_SLV,
-    #if BLE_APP_HT
-    .appearance = 728,
-    #else
-    // Device Appearance
-    .appearance = 0x0000,
-    #endif
-    .appearance_write_perm = GAPM_WRITE_DISABLE,
-    .name_write_perm = GAPM_WRITE_DISABLE,
-    .max_mtu = 23,
-    .con_intv_min = MS_TO_DOUBLESLOTS(10),
-    .con_intv_max = MS_TO_DOUBLESLOTS(20),
-    .con_latency  = 0,
-    // Slave preferred Link supervision timeout
-    .superv_to    = 100,
-    .irk = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
-    .flags = 0
-};
-
+static void (*adv_timeout_callback)(void)                                          __attribute__((section("retention_mem_area0"),zero_init)); // @RETENTION MEMORY
 
 /*
  * FUNCTION DEFINITIONS
@@ -266,7 +129,7 @@ static const struct gapm_set_dev_config_cmd default_set_dev_config =
 
 /**
  ****************************************************************************************
- * @brief Check if the task_id has an entry in the user_prf_func 
+ * @brief Check if the task_id has an entry in the user_prf_func
  * @param[in] task_id The task_id to check
  * @return true if the task_id has an entry in the user_prf_func.
  ****************************************************************************************
@@ -275,10 +138,10 @@ static const struct gapm_set_dev_config_cmd default_set_dev_config =
 static bool app_task_in_user_app(enum KE_TASK_TYPE task_id)
 {
     uint8_t i=0;
-    
+
     while( user_prf_funcs[i].task_id != TASK_NONE )
     {
-        if (user_prf_funcs[i].task_id == task_id) 
+        if (user_prf_funcs[i].task_id == task_id)
             return(true);
         i++;
     }
@@ -288,7 +151,7 @@ static bool app_task_in_user_app(enum KE_TASK_TYPE task_id)
 
 /**
  ****************************************************************************************
- * @brief Calls all the enable function of the profile registered in prf_func, 
+ * @brief Calls all the enable function of the profile registered in prf_func,
  *        custs_prf_func and user_prf_func.
  * @param[in] conhdl The connection handle
  * @return void
@@ -303,13 +166,13 @@ void app_prf_enable (uint16_t conhdl)
      {
         if( user_prf_funcs[i].enable_func != NULL )
         {
-            user_prf_funcs[i++].enable_func(conhdl);         
+            user_prf_funcs[i++].enable_func(conhdl);
         }
             else i++;
      }
-     
+
      i=0;
-     
+
         /*--------------------------------------------------------------
         * ENABLE REQUIRED PROFILES
         *-------------------------------------------------------------*/
@@ -317,20 +180,20 @@ void app_prf_enable (uint16_t conhdl)
         {
             if(( prf_funcs[i].enable_func != NULL ) && (!app_task_in_user_app(prf_funcs[i].task_id)))
             {
-                prf_funcs[i++].enable_func(conhdl);         
+                prf_funcs[i++].enable_func(conhdl);
             }
             else i++;
         }
-        
+
         i=0;
 #if BLE_CUSTOM_SERVER
         while( cust_prf_funcs[i].task_id != TASK_NONE )
         {
             if( cust_prf_funcs[i].enable_func != NULL )
             {
-                cust_prf_funcs[i++].enable_func(conhdl);         
+                cust_prf_funcs[i++].enable_func(conhdl);
             }
-            else i++; 
+            else i++;
         }
 #endif
 }
@@ -344,9 +207,9 @@ void app_prf_enable (uint16_t conhdl)
  */
 static bool app_db_init_next(void)
 {
-    static uint8_t i __attribute__((section("retention_mem_area0"),zero_init)); //@RETENTION MEMORY;    
-    static uint8_t k __attribute__((section("retention_mem_area0"),zero_init)); //@RETENTION MEMORY;    
-    
+    static uint8_t i __attribute__((section("retention_mem_area0"),zero_init)); //@RETENTION MEMORY;
+    static uint8_t k __attribute__((section("retention_mem_area0"),zero_init)); //@RETENTION MEMORY;
+
     // initialise the databases for all the included profiles
     while( user_prf_funcs[k].task_id != TASK_NONE )
     {
@@ -361,7 +224,7 @@ static bool app_db_init_next(void)
     // initialise the databases for all the included profiles
     while( prf_funcs[i].task_id != TASK_NONE )
     {
-        if (( prf_funcs[i].db_create_func != NULL ) \
+        if (( prf_funcs[i].db_create_func != NULL )
             && (!app_task_in_user_app(prf_funcs[i].task_id)))    //case that the this task has an entry in the user_prf as well
         {
             prf_funcs[i++].db_create_func();
@@ -370,10 +233,10 @@ static bool app_db_init_next(void)
         else i++;
     }
 
-    
+
     #if BLE_CUSTOM1_SERVER
     {
-        static uint8_t j __attribute__((section("retention_mem_area0"),zero_init)); //@RETENTION MEMORY;    
+        static uint8_t j __attribute__((section("retention_mem_area0"),zero_init)); //@RETENTION MEMORY;
         while( cust_prf_funcs[j].task_id != TASK_NONE )
         {
             if( cust_prf_funcs[j].db_create_func != NULL )
@@ -386,40 +249,43 @@ static bool app_db_init_next(void)
         j = 0;
     }
     #endif
-    
+
     k = 0;
-    
+
     i = 0;
     return true;
 }
 
 /**
  ****************************************************************************************
- * @brief Read advertising data from NDVS memory.
- * @param[in] len              Expected length of the TAG
- * @param[out] data            A pointer to the buffer allocated by the caller to be filled with
- *                             the DATA part of the TAG
- * @param[in] permissible_size The permissible size of the TAG
- * @param[in] max_size         The max size of the buffer to be filled with TAG data
- * @param[in] tag              TAG to look for whose DATA is to be retrieved
+ * @brief Read advertising data or scan response data from NDVS memory.
+ * @param[in|out] len              Expected length of the TAG
+ * @param[out]    data             A pointer to the buffer allocated by the caller to be
+ *                                 filled with the DATA part of the TAG
+ * @param[in]     permissible_size The permissible size of the TAG
+ * @param[in]     max_size         The max size of the buffer to be filled with TAG data
+ * @param[in]     tag              TAG to look for whose DATA is to be retrieved
  * @return void
  ****************************************************************************************
  */
-static void app_easy_gap_adv_read_from_NVDS(uint8_t *len, uint8_t *data, const uint8_t permissible_size,\
-                                                       const uint8_t max_size, const uint8_t tag)
+static void app_easy_gap_adv_read_from_NVDS(uint8_t *len,
+                                            uint8_t *data,
+                                            const uint8_t permissible_size,
+                                            const uint8_t max_size,
+                                            const uint8_t tag)
 {
     uint8_t temp_data[max_size];
-    *len=max_size;
+    *len = max_size;
     if(nvds_get(tag, len, temp_data) != NVDS_OK)
     {
-        ASSERT_WARNING(0);
+        ASSERT_ERROR(0);
         *len = 0;
     }
     else
     {
-        ASSERT_WARNING(*len<permissible_size);
-        *len = co_min(*len, permissible_size-1);
-         memcpy(data, temp_data, *len);
+        ASSERT_ERROR(*len <= permissible_size);
+        *len = co_min(*len, permissible_size);
+        memcpy(data, temp_data, *len);
     }
 }
 
@@ -427,14 +293,16 @@ static void app_easy_gap_adv_read_from_NVDS(uint8_t *len, uint8_t *data, const u
  ****************************************************************************************
  * @brief Inject the device name in advertising data.
  * @param[out] len        The Advertising data length
- * @param[in] name_length The device name length
+ * @param[in]  name_length The device name length
  * @param[out] data       Pointer to the buffer which will carry the device name
- * @param[in] name_data   The device name
+ * @param[in]  name_data   The device name
  * @return void
  ****************************************************************************************
  */
-static void app_easy_gap_place_name_ad_struct(uint8_t *len, uint8_t const name_length,\
-                                                            uint8_t *data, uint8_t const *name_data)
+static void app_easy_gap_place_name_ad_struct(uint8_t *len,
+                                              uint8_t const name_length,
+                                              uint8_t *data,
+                                              uint8_t const *name_data)
 {
     // Fill Length
     data[0] = name_length + 1;
@@ -448,77 +316,81 @@ static void app_easy_gap_place_name_ad_struct(uint8_t *len, uint8_t const name_l
 
 /**
  ****************************************************************************************
- * @brief Create advertising message for non-connectable peripheral.
+ * @brief Create advertising message for nonconnectable undirected event (ADV_NONCONN_IND).
  * @return gapm_start_advertise_cmd Pointer to the advertising message
  ****************************************************************************************
  */
 static struct gapm_start_advertise_cmd* app_easy_gap_non_connectable_advertise_start_create_msg(void)
 {
     // Allocate a message for GAP
-    if (adv_cmd==NULL)
+    if (adv_cmd == NULL)
     {
         struct gapm_start_advertise_cmd *cmd;
         cmd = app_advertise_start_msg_create();
-        adv_cmd=cmd;
-        if (USER_CONFIG)
+        adv_cmd = cmd;
+        
+        cmd->op.code = GAPM_ADV_NON_CONN;
+        cmd->op.addr_src = user_adv_conf.addr_src;
+        cmd->op.renew_dur = user_adv_conf.renew_dur;
+        if (user_adv_conf.addr_src == GAPM_PROVIDED_RND_ADDR)
         {
-            cmd->op.code = user_non_connectable_advertise_conf.advertise_operation;
-            cmd->op.addr_src = user_non_connectable_advertise_conf.address_src;
-            cmd->intv_max = user_non_connectable_advertise_conf.intv;
-            cmd->intv_min = user_non_connectable_advertise_conf.intv;
-            cmd->channel_map = user_non_connectable_advertise_conf.channel_map;
-            ASSERT_WARNING(user_non_connectable_advertise_conf.advertise_operation == GAPM_ADV_NON_CONN);
+            memcpy(cmd->op.addr.addr, user_adv_conf.addr, BD_ADDR_LEN*sizeof(uint8_t));
+        }
+        cmd->intv_min = user_adv_conf.intv_min;
+        cmd->intv_max = user_adv_conf.intv_max;
+        cmd->channel_map = user_adv_conf.channel_map;
+        cmd->info.host.mode = user_adv_conf.mode;
+        cmd->info.host.adv_filt_policy = user_adv_conf.adv_filt_policy;
+        
+        // Get advertising data and their data from NVDS.
+        // Carefull to get data from the NVDS you need to have an array
+        // of at least 32 positions.
+        // Although supported by NVDS you should not store in NVDS mode than ADV_DATA_LEN data.
+        app_easy_gap_adv_read_from_NVDS(&cmd->info.host.adv_data_len,
+                                        &cmd->info.host.adv_data[0],
+                                        APP_ADV_DATA_MAX_SIZE,
+                                        ADV_DATA_LEN + 1,
+                                        NVDS_TAG_APP_BLE_ADV_DATA);
+       
+        // Zero the Scan Response Data
+        cmd->info.host.scan_rsp_data_len = 0;
+        memset(&cmd->info.host.scan_rsp_data[0], 0, SCAN_RSP_DATA_LEN);
+       
+        // Get remaining space in the Advertising Data - 2 bytes are used for name length/flag
+        uint8_t adv_avail_space = APP_ADV_DATA_MAX_SIZE - adv_cmd->info.host.adv_data_len - 2;
+        uint8_t device_name_length = 0;
+        uint8_t device_name_temp_buf[NVDS_LEN_DEVICE_NAME];
+        // Check if more data can be added to the Advertising Data
+        if (adv_avail_space > 0)
+        {
+            // Get the Device Name to add in the Advertising Data
+            // Get default Device Name (No name if not enough space)
+            device_name_length = NVDS_LEN_DEVICE_NAME;
+            if (nvds_get(NVDS_TAG_DEVICE_NAME, &device_name_length, &device_name_temp_buf[0]) != NVDS_OK)
             {
-                cmd->info.host.mode=user_non_connectable_advertise_mode;
-                // Advertising Data
-                // Carefull to get data from the NVDS you need to have an array
-                // of at least 32 positions
-                app_easy_gap_adv_read_from_NVDS (&cmd->info.host.adv_data_len,&cmd->info.host.adv_data[0],
-                                                 APP_ADV_DATA_MAX_SIZE, ADV_DATA_LEN+1, NVDS_TAG_APP_BLE_ADV_DATA);
-
-                {
-                    // Scan Response Data
-                    cmd->info.host.scan_rsp_data_len  = 0;
-                    memset(&cmd->info.host.scan_rsp_data[0], 0, SCAN_RSP_DATA_LEN);
-                }
-
-                // Get remaining space in the Advertising Data - 2 bytes are used for name length/flag
-                int16_t device_name_adv_avail_space = APP_ADV_DATA_MAX_SIZE - adv_cmd->info.host.adv_data_len - 2;
-                uint8_t device_name_length = 0;
-                uint8_t device_name_temp_buf[NVDS_LEN_DEVICE_NAME];
-                // Check if data can be added to the Advertising data
-                if (device_name_adv_avail_space > 0)
-                {
-                // Get the Device Name to add in the Advertising Data
-                // Get default Device Name (No name if not enough space)
-                   device_name_length = NVDS_LEN_DEVICE_NAME;
-                   if (nvds_get(NVDS_TAG_DEVICE_NAME, &device_name_length, &device_name_temp_buf[0]) != NVDS_OK)
-                    {
-                        // Restore the default value
-                        ASSERT_WARNING(0);
-                        device_name_length = 0;
-                    }
-                }
-
-                //place the NAME to advertise or in the scan response.
-                if (device_name_adv_avail_space>=device_name_length)
-                {
-                    app_easy_gap_place_name_ad_struct(&cmd->info.host.adv_data_len, device_name_length, \
-                    &cmd->info.host.adv_data[cmd->info.host.adv_data_len], device_name_temp_buf);
-                }
+                // Restore the default value
+                ASSERT_WARNING(0);
+                device_name_length = 0;
             }
         }
-        else
-            memcpy((void*)cmd, (void*)&default_non_connectable_adv_cmd, sizeof(default_non_connectable_adv_cmd));
-    }
 
+        // Place the Device Name in the Advertising Data
+        if(device_name_length > 0)
+        {
+            if (adv_avail_space >= device_name_length)
+            {
+                app_easy_gap_place_name_ad_struct(&cmd->info.host.adv_data_len, device_name_length,
+                &cmd->info.host.adv_data[cmd->info.host.adv_data_len], device_name_temp_buf);
+            }
+        }
+    }
     return(adv_cmd);
 }
 
 /**
  ****************************************************************************************
- * @brief Create advertising message for undirected connection.
- * @return Pointer to the advertising message
+ * @brief Create advertising message for connectable undirected event (ADV_IND).
+ * @return gapm_start_advertise_cmd Pointer to the advertising message
  ****************************************************************************************
  */
 static struct gapm_start_advertise_cmd* app_easy_gap_undirected_advertise_start_create_msg(void)
@@ -529,79 +401,80 @@ static struct gapm_start_advertise_cmd* app_easy_gap_undirected_advertise_start_
         struct gapm_start_advertise_cmd *cmd;
         cmd = app_advertise_start_msg_create();
         adv_cmd = cmd;
-        if (USER_CONFIG)
+       
+        cmd->op.code = GAPM_ADV_UNDIRECT;
+        cmd->op.addr_src = user_adv_conf.addr_src;
+        cmd->op.renew_dur = user_adv_conf.renew_dur;
+        if (user_adv_conf.addr_src == GAPM_PROVIDED_RND_ADDR)
         {
-            cmd->op.code = user_undirected_advertise_conf.advertise_operation;
-            cmd->op.addr_src = user_undirected_advertise_conf.address_src;
-            cmd->intv_max = user_undirected_advertise_conf.intv;
-            cmd->intv_min = user_undirected_advertise_conf.intv;
-            cmd->channel_map = user_undirected_advertise_conf.channel_map;
-            ASSERT_WARNING(user_undirected_advertise_conf.advertise_operation == GAPM_ADV_UNDIRECT);
+            memcpy(cmd->op.addr.addr, user_adv_conf.addr, BD_ADDR_LEN*sizeof(uint8_t));
+        }
+        cmd->intv_min = user_adv_conf.intv_min;
+        cmd->intv_max = user_adv_conf.intv_max;
+        cmd->channel_map = user_adv_conf.channel_map;
+        cmd->info.host.mode = user_adv_conf.mode;
+        cmd->info.host.adv_filt_policy = user_adv_conf.adv_filt_policy;
+        
+        // Get advertising data and their data from NVDS.
+        // Carefull to get data from the NVDS you need to have an array
+        // of at least 32 positions.
+        // Although supported by NVDS you should not store in NVDS mode than ADV_DATA_LEN data.
+        app_easy_gap_adv_read_from_NVDS(&cmd->info.host.adv_data_len,
+                                        &cmd->info.host.adv_data[0],
+                                        APP_ADV_DATA_MAX_SIZE, 
+                                        ADV_DATA_LEN + 1, 
+                                        NVDS_TAG_APP_BLE_ADV_DATA);
+
+        // Get scan response data and their length from NVDS.
+        // Carefull to get data from the NVDS you need to have an array
+        // of at least 32 positions.
+        // Although supported by NVDS you should not store in NVDS mode than SCAN_RSP_DATA_LEN data.
+        app_easy_gap_adv_read_from_NVDS(&cmd->info.host.scan_rsp_data_len,
+                                        &cmd->info.host.scan_rsp_data[0],
+                                        APP_SCAN_RESP_DATA_MAX_SIZE,
+                                        SCAN_RSP_DATA_LEN + 1,
+                                        NVDS_TAG_APP_BLE_SCAN_RESP_DATA);
+
+        // Get remaining space in the Advertising Data - 2 bytes are used for name length/flag
+        uint8_t adv_avail_space = APP_ADV_DATA_MAX_SIZE - adv_cmd->info.host.adv_data_len - 2;
+        uint8_t scan_avail_space = SCAN_RSP_DATA_LEN - adv_cmd->info.host.scan_rsp_data_len - 2;
+        uint8_t device_name_length = 0;
+        uint8_t device_name_temp_buf[NVDS_LEN_DEVICE_NAME];
+        // Check if data can be added to the Advertising data
+        if ((adv_avail_space > 0) || (scan_avail_space > 0))
+        {
+            // Get the Device Name to add in the Advertising Data
+            // Get default Device Name (No name if not enough space)
+            device_name_length = NVDS_LEN_DEVICE_NAME;
+            if (nvds_get(NVDS_TAG_DEVICE_NAME, &device_name_length, &device_name_temp_buf[0]) != NVDS_OK)
             {
-                cmd->info.host.mode = user_undirected_advertise_mode;
-                // Advertising Data
-                // Carefull to get data from the NVDS you need to have an array
-                // of at least 32 positions
-                app_easy_gap_adv_read_from_NVDS (&cmd->info.host.adv_data_len,&cmd->info.host.adv_data[0], \
-                          APP_ADV_DATA_MAX_SIZE, ADV_DATA_LEN+1, NVDS_TAG_APP_BLE_ADV_DATA);
-
-                // Scan Response Data
-                // Carefull to get data from the NVDS you need to have an array
-                // of at least 32 positions
-                //Although Supported by NVDS you should not store in NVDS mode than  SCAN_RSP_DATA_LEN data
-                app_easy_gap_adv_read_from_NVDS (&cmd->info.host.scan_rsp_data_len,&cmd->info.host.scan_rsp_data[0], \
-                          SCAN_RSP_DATA_LEN, SCAN_RSP_DATA_LEN+1, NVDS_TAG_APP_BLE_SCAN_RESP_DATA);
-
-                // Get remaining space in the Advertising Data - 2 bytes are used for name length/flag
-                int16_t device_name_adv_avail_space = APP_ADV_DATA_MAX_SIZE - adv_cmd->info.host.adv_data_len - 2;
-                int16_t device_name_scan_avail_space = SCAN_RSP_DATA_LEN - adv_cmd->info.host.scan_rsp_data_len - 2;
-                uint8_t device_name_length = 0;
-                uint8_t device_name_temp_buf[NVDS_LEN_DEVICE_NAME];
-                // Check if data can be added to the Advertising data
-                if ((device_name_adv_avail_space > 0) || (device_name_scan_avail_space > 0))
-                {
-                // Get the Device Name to add in the Advertising Data
-                // Get default Device Name (No name if not enough space)
-                   device_name_length = NVDS_LEN_DEVICE_NAME;
-                   if (nvds_get(NVDS_TAG_DEVICE_NAME, &device_name_length, &device_name_temp_buf[0]) != NVDS_OK)
-                    {
-                        // Restore the default value
-                        ASSERT_WARNING(0);
-                        device_name_length = 0;
-                    }
-                }
-
-                //place the NAME to advertise or in the scan response.
-
-                if(device_name_length > 0)
-                {
-                    //select where to place the
-                    //place the NAME to advertise or in the scan response.
-                    if(device_name_adv_avail_space >= device_name_length)
-                    {
-                        app_easy_gap_place_name_ad_struct(&cmd->info.host.adv_data_len, device_name_length, \
-                        &cmd->info.host.adv_data[cmd->info.host.adv_data_len], device_name_temp_buf);
-                    }
-                    else
-                        if(device_name_scan_avail_space >= device_name_length)
-                    {
-
-                        app_easy_gap_place_name_ad_struct(&cmd->info.host.scan_rsp_data_len, device_name_length, \
-                        &cmd->info.host.scan_rsp_data[cmd->info.host.scan_rsp_data_len], device_name_temp_buf);
-                    }
-                 }
+                // Restore the default value
+                ASSERT_WARNING(0);
+                device_name_length = 0;
             }
         }
-        else
-            memcpy((void*)cmd, (void*)&default_undir_adv_cmd, sizeof(default_undir_adv_cmd));
-    }
 
+        // Place the Device Name in the Advertising Data or in the Scan Response Data
+        if(device_name_length > 0)
+        {
+            if(adv_avail_space >= device_name_length)
+            {
+                app_easy_gap_place_name_ad_struct(&cmd->info.host.adv_data_len, device_name_length,
+                &cmd->info.host.adv_data[cmd->info.host.adv_data_len], device_name_temp_buf);
+            }
+            else if(scan_avail_space >= device_name_length)
+            {
+                app_easy_gap_place_name_ad_struct(&cmd->info.host.scan_rsp_data_len, device_name_length,
+                &cmd->info.host.scan_rsp_data[cmd->info.host.scan_rsp_data_len], device_name_temp_buf);
+            }
+         }
+    }
     return(adv_cmd);
 }
 
 /**
  ****************************************************************************************
- * @brief Create advertising message for directed connection.
+ * @brief Create advertising message for connectable directed event (ADV_DIRECT_IND).
  * @return gapm_start_advertise_cmd Pointer to the advertising message
  ****************************************************************************************
  */
@@ -613,17 +486,18 @@ static struct gapm_start_advertise_cmd* app_easy_gap_directed_advertise_start_cr
         struct gapm_start_advertise_cmd *cmd;
         cmd = app_advertise_start_msg_create();
         adv_cmd = cmd;
-        if (USER_CONFIG)
+        
+        cmd->op.addr_src = user_adv_conf.addr_src;
+        cmd->op.renew_dur = user_adv_conf.renew_dur;
+        if ((user_adv_conf.addr_src == GAPM_PROVIDED_RND_ADDR) || (user_adv_conf.addr_src == GAPM_PROVIDED_RECON_ADDR))
         {
-            cmd->op.code = user_directed_advertise_conf.advertise_operation;
-            cmd->op.addr_src = user_directed_advertise_conf.address_src;
-            cmd->channel_map = user_directed_advertise_conf.channel_map;
-            ASSERT_WARNING(user_directed_advertise_conf.advertise_operation == GAPM_ADV_DIRECT);
-            cmd->info.direct.addr_type = user_directed_advertise_target_address_conf.addr_type;
-            memcpy(cmd->info.direct.addr.addr, user_directed_advertise_target_address_conf.addr,BD_ADDR_LEN);
+            memcpy(cmd->op.addr.addr, user_adv_conf.addr, BD_ADDR_LEN*sizeof(uint8_t));
         }
-        else
-            memcpy((void*)cmd, (void*)&default_dir_adv_cmd, sizeof(default_dir_adv_cmd));
+        cmd->intv_min = LLM_ADV_INTERVAL_MIN;
+        cmd->intv_max = LLM_ADV_INTERVAL_MAX;
+        cmd->channel_map = user_adv_conf.channel_map;
+        memcpy(cmd->info.direct.addr.addr, user_adv_conf.peer_addr, BD_ADDR_LEN*sizeof(uint8_t));
+        cmd->info.direct.addr_type = user_adv_conf.peer_addr_type;
     }
     return(adv_cmd);
 }
@@ -643,26 +517,21 @@ static struct gapc_param_update_cmd* app_easy_gap_param_update_msg_create(uint8_
         cmd = app_param_update_msg_create(connection_idx);
         ASSERT_WARNING(connection_idx < APP_EASY_GAP_MAX_CONNECTION);
         param_update_cmd[connection_idx] = cmd;
-        if (USER_CONFIG)
-        {
-    #ifndef __DA14581__
+        
+        #ifndef __DA14581__
             cmd->params.intv_max = user_connection_param_conf.intv_max;
             cmd->params.intv_min = user_connection_param_conf.intv_min;
             cmd->params.latency = user_connection_param_conf.latency;
             cmd->params.time_out = user_connection_param_conf.time_out;
-    #else
+        #else
             cmd->intv_max = user_connection_param_conf.intv_max;
             cmd->intv_min = user_connection_param_conf.intv_min;
             cmd->latency = user_connection_param_conf.latency;
             cmd->time_out = user_connection_param_conf.time_out;
             cmd->ce_len_min = user_connection_param_conf.ce_len_min;
             cmd->ce_len_max = user_connection_param_conf.ce_len_max;
-    #endif
-        }
-        else
-            memcpy((void*)cmd, (void*)&default_param_update_cmd, sizeof(struct gapc_param_update_cmd));
+        #endif
     }
-
     return (param_update_cmd[connection_idx]);
 }
 
@@ -677,15 +546,84 @@ static struct gapm_start_connection_cmd* app_easy_gap_start_connection_to_msg_cr
     // Allocate a message for GAP
     if (start_connection_cmd == NULL)
     {
-        start_connection_cmd = app_connect_start_msg_create();
-        memcpy((void*)start_connection_cmd, (void*)&default_start_connection_cmd, sizeof(struct gapm_start_connection_cmd));
+        struct gapm_start_connection_cmd *cmd;
+        cmd = app_connect_start_msg_create();
+        start_connection_cmd = cmd;
+        
+        cmd->op.code = user_central_conf.code;
+        cmd->op.addr_src = user_central_conf.addr_src;
+        cmd->op.renew_dur = user_central_conf.renew_dur;
+        if ((user_central_conf.addr_src == GAPM_PROVIDED_RND_ADDR) || (user_central_conf.addr_src == GAPM_PROVIDED_RECON_ADDR))
+        {
+            memcpy(cmd->op.addr.addr, user_central_conf.addr, BD_ADDR_LEN*sizeof(uint8_t));
+        }
+        cmd->scan_interval = user_central_conf.scan_interval;
+        cmd->scan_window = user_central_conf.scan_window;
+        cmd->con_intv_min = user_central_conf.con_intv_min;
+        cmd->con_intv_max = user_central_conf.con_intv_max;
+        cmd->con_latency = user_central_conf.con_latency;
+        cmd->superv_to = user_central_conf.superv_to;
+        cmd->ce_len_min = user_central_conf.ce_len_min;
+        cmd->ce_len_max = user_central_conf.ce_len_max;
+        
+        /// Number of peer device information present in message.
+        /// Shall be 1 for GAPM_CONNECTION_DIRECT or GAPM_CONNECTION_NAME_REQUEST operations
+        /// Shall be greater than 0 for other operations
+        if ((user_central_conf.code == GAPM_CONNECTION_DIRECT) || (user_central_conf.code == GAPM_CONNECTION_NAME_REQUEST))
+        {
+            cmd->nb_peers = 1;
+        }
+        else
+        {
+            cmd->nb_peers = CFG_MAX_CONNECTIONS;
+            
+            #if (CFG_MAX_CONNECTIONS >= 1)
+            memcpy(cmd->peers[0].addr.addr, user_central_conf.peer_addr_0, BD_ADDR_LEN*sizeof(uint8_t));
+            cmd->peers[0].addr_type = user_central_conf.peer_addr_0_type;
+            #endif
+            
+            #if (CFG_MAX_CONNECTIONS >= 2)
+            memcpy(cmd->peers[1].addr.addr, user_central_conf.peer_addr_1, BD_ADDR_LEN*sizeof(uint8_t));
+            cmd->peers[1].addr_type = user_central_conf.peer_addr_1_type;
+            #endif
+            
+            #if (CFG_MAX_CONNECTIONS >= 3)
+            memcpy(cmd->peers[2].addr.addr, user_central_conf.peer_addr_2, BD_ADDR_LEN*sizeof(uint8_t));
+            cmd->peers[2].addr_type = user_central_conf.peer_addr_2_type;
+            #endif
+
+            #if (CFG_MAX_CONNECTIONS >= 4)
+            memcpy(cmd->peers[3].addr.addr, user_central_conf.peer_addr_3, BD_ADDR_LEN*sizeof(uint8_t));
+            cmd->peers[3].addr_type = user_central_conf.peer_addr_3_type;
+            #endif
+            
+            #if (CFG_MAX_CONNECTIONS >= 5)
+            memcpy(cmd->peers[4].addr.addr, user_central_conf.peer_addr_4, BD_ADDR_LEN*sizeof(uint8_t));
+            cmd->peers[4].addr_type = user_central_conf.peer_addr_4_type;
+            #endif
+            
+            #if (CFG_MAX_CONNECTIONS >= 6)
+            memcpy(cmd->peers[5].addr.addr, user_central_conf.peer_addr_5, BD_ADDR_LEN*sizeof(uint8_t));
+            cmd->peers[5].addr_type = user_central_conf.peer_addr_5_type;
+            #endif
+            
+            #if (CFG_MAX_CONNECTIONS >= 7)
+            memcpy(cmd->peers[6].addr.addr, user_central_conf.peer_addr_6, BD_ADDR_LEN*sizeof(uint8_t));
+            cmd->peers[6].addr_type = user_central_conf.peer_addr_6_type;
+            #endif
+            
+            #if (CFG_MAX_CONNECTIONS >= 8)
+            memcpy(cmd->peers[7].addr.addr, user_central_conf.peer_addr_7, BD_ADDR_LEN*sizeof(uint8_t));
+            cmd->peers[7].addr_type = user_central_conf.peer_addr_7_type;
+            #endif
+        }
     }
     return (start_connection_cmd);
 }
 
 /**
  ****************************************************************************************
- * @brief Create device configuration message.
+ * @brief Create GAPM device configuration message.
  * @return gapm_set_dev_config_cmd Pointer to the device configuration message
  ****************************************************************************************
  */
@@ -698,23 +636,18 @@ static struct gapm_set_dev_config_cmd* app_easy_gap_dev_config_create_msg(void)
         cmd = app_gapm_configure_msg_create();
         set_dev_config_cmd = cmd;
 
-        if(USER_CONFIG)
-        {
-            cmd->operation = GAPM_SET_DEV_CONFIG;
-            cmd->role = user_gapm_conf.role;
-            cmd->appearance = user_gapm_conf.appearance;
-            cmd->appearance_write_perm = user_gapm_conf.appearance_write_perm;
-            cmd->name_write_perm = user_gapm_conf.name_write_perm;
-            cmd->max_mtu = user_gapm_conf.max_mtu;
-            cmd->con_intv_min = user_gapm_conf.con_intv_min;
-            cmd->con_intv_max = user_gapm_conf.con_intv_max;
-            cmd->con_latency = user_gapm_conf.con_latency;
-            cmd->superv_to = user_gapm_conf.superv_to;
-            cmd->flags = user_gapm_conf.flags;
-            memcpy(cmd->irk.key,user_gapm_conf.irk,KEY_LEN);
-        }
-        else
-            memcpy((void*)cmd, (void*)&default_set_dev_config, sizeof(struct gapm_set_dev_config_cmd));
+        cmd->operation = GAPM_SET_DEV_CONFIG;
+        cmd->role = user_gapm_conf.role;
+        memcpy(cmd->irk.key, user_gapm_conf.irk, KEY_LEN*sizeof(uint8_t));
+        cmd->appearance = user_gapm_conf.appearance;
+        cmd->appearance_write_perm = user_gapm_conf.appearance_write_perm;
+        cmd->name_write_perm = user_gapm_conf.name_write_perm;
+        cmd->max_mtu = user_gapm_conf.max_mtu;
+        cmd->con_intv_min = user_gapm_conf.con_intv_min;
+        cmd->con_intv_max = user_gapm_conf.con_intv_max;
+        cmd->con_latency = user_gapm_conf.con_latency;
+        cmd->superv_to = user_gapm_conf.superv_to;
+        cmd->flags = user_gapm_conf.flags;
     }
     return (set_dev_config_cmd);
 }
@@ -796,7 +729,7 @@ void app_easy_gap_disconnect(uint8_t connection_idx)
 
     cmd->reason = CO_ERROR_REMOTE_USER_TERM_CON;
     app_env[connection_idx].connection_active=false;
-    
+
     // Send the message
     app_disconnect_msg_send(cmd);
 }
@@ -840,7 +773,7 @@ struct gapm_start_advertise_cmd* app_easy_gap_directed_advertise_get_active(void
 void app_easy_gap_directed_advertise_start(void)
 {
     struct gapm_start_advertise_cmd* cmd;
-    cmd = app_easy_gap_undirected_advertise_start_create_msg();
+    cmd = app_easy_gap_directed_advertise_start_create_msg();
 
     // Send the message
     app_advertise_start_msg_send(cmd);
@@ -863,7 +796,7 @@ void app_easy_gap_non_connectable_advertise_start(void)
     // Send the message
     app_advertise_start_msg_send(cmd);
     adv_cmd = NULL ;
-    
+
     // We are now connectable
     ke_state_set(TASK_APP, APP_CONNECTABLE);
 }
@@ -911,7 +844,7 @@ void app_easy_gap_param_update_start(uint8_t connection_idx)
     param_update_cmd[connection_idx] = NULL ;
 
     // We are now connectable
-    ke_state_set(TASK_APP, APP_PARAM_UPD);   
+    ke_state_set(TASK_APP, APP_PARAM_UPD);
 }
 
 void app_timer_set(ke_msg_id_t const timer_id, ke_task_id_t const task_id, uint16_t delay)
@@ -952,7 +885,7 @@ void app_easy_gap_start_connection_to(void)
     volatile struct gapm_start_connection_cmd* msg;
     msg = app_easy_gap_start_connection_to_msg_create();
     app_connect_start_msg_send((void *) msg);
-    msg = NULL;
+    start_connection_cmd = NULL;
 }
 
 bool app_db_init_start(void)
@@ -988,7 +921,6 @@ void app_easy_gap_dev_configure(void)
     struct gapm_set_dev_config_cmd* cmd = app_easy_gap_dev_config_create_msg();
     app_gapm_configure_msg_send(cmd);
     set_dev_config_cmd = NULL;
-    return;
 }
 
 app_prf_srv_perm_t get_user_prf_srv_perm(enum KE_TASK_TYPE task_id)

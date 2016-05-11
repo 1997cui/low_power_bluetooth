@@ -34,8 +34,6 @@
  */
 
 #define USER_CONFIG                (1)
-#define USER_CON_TIMEOUT     700 //7 sec
-#define USER_CON_INTV       12.5//ms
 
 /*
  * LOCAL VARIABLES
@@ -175,7 +173,7 @@ static const struct advertise_configuration user_adv_conf = {
  */
 static const struct gapm_configuration user_gapm_conf = {
      /// Device Role: Central, Peripheral, Observer or Broadcaster
-    .role = GAP_CENTRAL_MST,
+    .role = GAP_PERIPHERAL_SLV,
 
     /// Device IRK used for resolvable random BD address generation (LSB first)
     .irk = {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00},
@@ -276,46 +274,10 @@ static const struct default_handlers_configuration  user_default_hnd_conf = {
 /*
  ****************************************************************************************
  *
- * Central configuration
+ * Central configuration (not used by current example)
  *
  ****************************************************************************************
  */
-//---------------------------------------------------------------------
-//-------------------------SCAN---RELATED------------------------------
-struct scan_configuration {
-    /// Operation code.
-    uint8_t     code;
-    /// Own BD address source of the device
-    uint8_t     addr_src;
-    /// Scan interval
-    uint16_t    interval;
-    /// Scan window size
-    uint16_t    window;
-    /// Scanning mode
-    uint8_t     mode;
-    /// Scan filter policy
-    uint8_t     filt_policy;
-    /// Scan duplicate filtering policy
-    uint8_t     filter_duplic;
-};
-
-static const struct scan_configuration user_scan_conf ={
-    /// Operation code.
-    .code = GAPM_SCAN_PASSIVE,
-    /// Own BD address source of the device
-    .addr_src = GAPM_PUBLIC_ADDR,
-    /// Scan interval
-    .interval = 10,
-    /// Scan window size
-    .window = 5,
-    /// Scanning mode
-    .mode = GAP_GEN_DISCOVERY,
-    /// Scan filter policy
-    .filt_policy = SCAN_ALLOW_ADV_ALL,
-    /// Scan duplicate filtering policy
-    .filter_duplic = SCAN_FILT_DUPLIC_EN
-};
-
 static const struct central_configuration user_central_conf = {
     /// GAPM requested operation:
     /// - GAPM_CONNECTION_DIRECT: Direct connection operation

@@ -15,8 +15,8 @@
  ****************************************************************************************
  */
 
-#ifndef USER_SPSC_H_
-#define USER_SPSC_H_
+#ifndef USER_SPSS_H_
+#define USER_SPSS_H_
 
 /**
  ****************************************************************************************
@@ -36,9 +36,10 @@
  */
 #include "rwble_config.h"
 
-#if (BLE_SPS_CLIENT)
+#if (BLE_SPS_SERVER)
 
 #include <stdint.h>          // standard integer definition
+#include <co_bt.h>
 
 /*
  * STRUCTURES
@@ -54,6 +55,8 @@
  * FUNCTION DECLARATIONS
  ****************************************************************************************
  */
+
+void user_sps_db_create(void);
 
 /**
  ****************************************************************************************
@@ -76,8 +79,8 @@ void user_send_ble_data(const uint8_t *data, uint16_t length);
 */
 void user_send_ble_flow_ctrl(uint8_t flow_ctrl);
 
-#endif //BLE_SPS_CLIENT
+#endif //BLE_SPS_SERVER
 
 /// @} APP
 
-#endif // USER_SPSC_H_
+#endif // USER_SPSS_H_

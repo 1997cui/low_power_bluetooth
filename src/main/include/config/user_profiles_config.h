@@ -36,9 +36,7 @@
  */
  
 /// Add below the profiles that the application wishes to use by including the <profile_name>.h file.
-
-#include "diss.h"
-#include "custs1.h"
+#include "sps_server.h"
 
 /*
  * PROFILE CONFIGUARTION
@@ -46,29 +44,6 @@
  */
 
 /// Add profile specific configurations
-
-/* DISS profile configurations
- * -----------------------------------------------------------------------------------------
- */
-
-/// Manufacturer Name (up to 18 chars)
-#define APP_DIS_MANUFACTURER_NAME       ("Dialog Semi")
-#define APP_DIS_MANUFACTURER_NAME_LEN   (11)
-/// Model Number String (up to 18 chars)
-#define APP_DIS_MODEL_NB_STR            ("DA1458x")
-#define APP_DIS_MODEL_NB_STR_LEN        (7)
-/// System ID - LSB -> MSB (FIXME)
-#define APP_DIS_SYSTEM_ID               ("\x12\x34\x56\xFF\xFE\x9A\xBC\xDE")
-#define APP_DIS_SYSTEM_ID_LEN           (8)
-#define APP_DIS_SW_REV                  DA14580_REFDES_SW_VERSION
-#define APP_DIS_FIRM_REV                DA14580_SW_VERSION
-#define APP_DIS_FEATURES                (DIS_MANUFACTURER_NAME_CHAR_SUP | DIS_MODEL_NB_STR_CHAR_SUP | DIS_SYSTEM_ID_CHAR_SUP | DIS_SW_REV_STR_CHAR_SUP | DIS_FIRM_REV_STR_CHAR_SUP | DIS_PNP_ID_CHAR_SUP)
-/// PNP ID
-#define APP_DISS_PNP_COMPANY_ID_TYPE    (0x01)
-#define APP_DISS_PNP_VENDOR_ID          (0x00D2)
-#define APP_DISS_PNP_PRODUCT_ID         (0x0580)
-#define APP_DISS_PNP_PRODUCT_VERSION    (0x0100)
-
 
 /// @} APP_CONFIG
 

@@ -1,7 +1,7 @@
 /**
 ****************************************************************************************
 *
-* @file  user_spsc_task.c
+* @file  user_spss_task.c
 *
 * @brief SPS application Message Handlers.
 *
@@ -22,6 +22,7 @@
  ****************************************************************************************
  */
 
+
 /*
  * INCLUDE FILES
  ****************************************************************************************
@@ -30,16 +31,16 @@
 
 #if (BLE_APP_PRESENT)
 
-#if (BLE_SPS_CLIENT)
-#include "user_spsc_task.h"
-#include "user_spsc.h"
-#include "app_task.h"                // application definitions
-#include "sps_client.h"    // SPS functions
-#include "sps_client_task.h"
+#if (BLE_SPS_SERVER)
+
+#include "user_spss_task.h"
+#include "user_spss.h" 
+#include "app_task.h"           // Application Task API
+#include "sps_server.h"         // SPS functions
+#include "sps_server_task.h"
 #include "user_sps_scheduler.h"
 
 #include "arch_console.h"
-
 /*
  * FUNCTION DEFINITIONS
  ****************************************************************************************
@@ -48,13 +49,15 @@
 
 const struct ke_msg_handler user_spss_process_handlers[]=
 {
-    {SPS_CLIENT_ENABLE_CFM,         (ke_msg_func_t)user_sps_client_enable_cfm_handler},
-    {SPS_CLIENT_DATA_TX_CFM,        (ke_msg_func_t)user_sps_client_data_tx_cfm_handler},
-    {SPS_CLIENT_DATA_RX_IND,        (ke_msg_func_t)user_sps_client_data_rx_ind_handler},
-    {SPS_CLIENT_TX_FLOW_CTRL_IND,   (ke_msg_func_t)user_sps_client_tx_flow_ctrl_ind_handler},
+    {SPS_SERVER_CREATE_DB_CFM,      (ke_msg_func_t)user_sps_create_db_cfm_handler},
+    {SPS_SERVER_ENABLE_CFM,         (ke_msg_func_t)user_sps_server_enable_cfm_handler},
+    {SPS_SERVER_DATA_TX_CFM,        (ke_msg_func_t)user_sps_server_data_tx_cfm_handler},
+    {SPS_SERVER_DATA_RX_IND,        (ke_msg_func_t)user_sps_server_data_rx_ind_handler},
+    {SPS_SERVER_TX_FLOW_CTRL_IND,   (ke_msg_func_t)user_sps_server_tx_flow_ctrl_ind_handler},
+    {SPS_SERVER_ERROR_IND,          (ke_msg_func_t)user_sps_server_error_ind_handler},
 };
 
-enum process_event_response user_spsc_process_handler(ke_msg_id_t const msgid,
+enum process_event_response user_spss_process_handler(ke_msg_id_t const msgid,
                                          void const *param,
                                          ke_task_id_t const dest_id,
                                          ke_task_id_t const src_id, 
@@ -65,7 +68,7 @@ enum process_event_response user_spsc_process_handler(ke_msg_id_t const msgid,
 }
 /**
  ****************************************************************************************
- * @brief Handles client enable confirmation
+ * @brief Handles start indication if the database is created
  *
  * @param[in] msgid     Id of the message received.
  * @param[in] param     Pointer to the parameters of the message.
@@ -75,14 +78,45 @@ enum process_event_response user_spsc_process_handler(ke_msg_id_t const msgid,
  * @return If the message was consumed or not.
  ****************************************************************************************
  */
-int user_sps_client_enable_cfm_handler(ke_msg_id_t const msgid,
-                                      struct sps_client_enable_cfm const *param,
+int user_sps_create_db_cfm_handler(ke_msg_id_t const msgid,
+                                      struct sps_server_create_db_cfm const *param,
+                                      ke_task_id_t const dest_id,
+                                      ke_task_id_t const src_id)
+{
+    // If state is not idle, ignore the message
+    if (ke_state_get(dest_id) == APP_DB_INIT)
+    {
+        // Inform the Application Manager
+        struct app_module_init_cmp_evt *cfm = KE_MSG_ALLOC(APP_MODULE_INIT_CMP_EVT,
+            TASK_APP, TASK_APP, app_module_init_cmp_evt);
+        
+        cfm->status = param->status;
+        
+        ke_msg_send(cfm);
+    }
+    return (KE_MSG_CONSUMED);
+}
+
+/**
+ ****************************************************************************************
+ * @brief Handles enable indication of the database
+ *
+ * @param[in] msgid     Id of the message received.
+ * @param[in] param     Pointer to the parameters of the message.
+ * @param[in] dest_id   ID of the receiving task instance (TASK_GAP).
+ * @param[in] src_id    ID of the sending task instance.
+ *
+ * @return If the message was consumed or not.
+ ****************************************************************************************
+ */
+int user_sps_server_enable_cfm_handler(ke_msg_id_t const msgid,
+                                      struct sps_server_enable_cfm const *param,
                                       ke_task_id_t const dest_id,
                                       ke_task_id_t const src_id)
 {
     user_ble_pull(false, false);
     arch_printf("Profile Enabled\r\n");
-    
+
     return (KE_MSG_CONSUMED);
 }
 
@@ -98,8 +132,8 @@ int user_sps_client_enable_cfm_handler(ke_msg_id_t const msgid,
  * @return If the message was consumed or not.
  ****************************************************************************************
  */
-int user_sps_client_data_tx_cfm_handler(ke_msg_id_t const msgid,
-                                      struct sps_client_data_tx_cfm const *param,
+int user_sps_server_data_tx_cfm_handler(ke_msg_id_t const msgid,
+                                      struct sps_server_data_tx_cfm const *param,
                                       ke_task_id_t const dest_id,
                                       ke_task_id_t const src_id)
 {
@@ -123,19 +157,19 @@ int user_sps_client_data_tx_cfm_handler(ke_msg_id_t const msgid,
  * @return If the message was consumed or not.
  ****************************************************************************************
  */
-int user_sps_client_data_rx_ind_handler(ke_msg_id_t const msgid,
-                                      struct sps_client_data_rx_ind const *param,
+int user_sps_server_data_rx_ind_handler(ke_msg_id_t const msgid,
+                                      struct sps_server_data_rx_ind const *param,
                                       ke_task_id_t const dest_id,
                                       ke_task_id_t const src_id)
 {
     user_ble_push((uint8_t *)param->data, param->length);
-    
+
     return (KE_MSG_CONSUMED);
 }
 
 /**
  ****************************************************************************************
- * @brief Handles client flow control state request indication
+ * @brief Handles server flow control state request indication
  *
  * @param[in] msgid     Id of the message received.
  * @param[in] param     Pointer to the parameters of the message.
@@ -145,8 +179,8 @@ int user_sps_client_data_rx_ind_handler(ke_msg_id_t const msgid,
  * @return If the message was consumed or not.
  ****************************************************************************************
  */
-int user_sps_client_tx_flow_ctrl_ind_handler(ke_msg_id_t const msgid,
-                                      struct sps_client_tx_flow_ctrl_ind const *param,
+int user_sps_server_tx_flow_ctrl_ind_handler(ke_msg_id_t const msgid,
+                                      struct sps_server_tx_flow_ctrl_ind const *param,
                                       ke_task_id_t const dest_id,
                                       ke_task_id_t const src_id)
 {
@@ -158,12 +192,34 @@ int user_sps_client_tx_flow_ctrl_ind_handler(ke_msg_id_t const msgid,
     {
         arch_printf("TX FLOW OFF\r\n");
     }
-
+    
     return (KE_MSG_CONSUMED);
 }
-#endif //(BLE_SPS_CLIENT)
+
+/**
+ ****************************************************************************************
+ * @brief Handles server error indication
+ *
+ * @param[in] msgid     Id of the message received.
+ * @param[in] param     Pointer to the parameters of the message.
+ * @param[in] dest_id   ID of the receiving task instance (TASK_GAP).
+ * @param[in] src_id    ID of the sending task instance.
+ *
+ * @return If the message was consumed or not.
+ ****************************************************************************************
+ */
+int user_sps_server_error_ind_handler(ke_msg_id_t const msgid,
+                                      struct prf_server_error_ind const *param,
+                                      ke_task_id_t const dest_id,
+                                      ke_task_id_t const src_id)
+{
+    //if(param->status == PRF_ERR_DISCONNECTED)
+    ASSERT_WARNING(0);
+    return (KE_MSG_CONSUMED);
+}
+#endif //(BLE_SPS_SERVER)
 
 #endif //(BLE_APP_PRESENT)
 
-/// @} APPTASK
+/// @} APP
 

@@ -374,10 +374,10 @@ uint8_t nvds_init(uint8_t *base, uint32_t len);
  * If the length does not match, the TAG header structure is still filled, in order for
  * the caller to be able to check the actual length of the TAG.
  *
- * @param[in]  tag     TAG to look for whose DATA is to be retrieved
- * @param[in]  length  Expected length of the TAG
- * @param[out] buf     A pointer to the buffer allocated by the caller to be filled with
- *                     the DATA part of the TAG
+ * @param[in]     tag     TAG to look for whose DATA is to be retrieved
+ * @param[in|out] length  Expected length of the TAG
+ * @param[out]    buf     A pointer to the buffer allocated by the caller to be filled with
+ *                        the DATA part of the TAG
  *
  * @return  NVDS_OK                  The read operation was performed
  *          NVDS_LENGTH_OUT_OF_RANGE The length passed in parameter is different than the TAG's

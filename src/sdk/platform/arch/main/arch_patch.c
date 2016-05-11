@@ -27,6 +27,8 @@
 #include "ke_task.h"
 #include "gtl_env.h"
 #include "gtl_task.h"
+#include "gapc_task.h"
+#include "l2cc_pdu.h"
 
 /**
  * @addtogroup PATCHES
@@ -81,6 +83,8 @@ int PATCHED_581_smpc_pairing_cfm_handler(ke_msg_id_t const msgid,
                                      struct smpc_pairing_cfm *param,
                                      ke_task_id_t const dest_id, ke_task_id_t const src_id);
                                      
+extern bool my_smpc_check_pairing_feat(struct gapc_pairing *pair_feat);
+extern uint8_t my_smpc_check_param(struct l2cc_pdu *pdu);
 #else /* DA14580 */
 
 extern void smpc_send_pairing_req_ind(uint8_t conidx, uint8_t req_type);
@@ -105,6 +109,7 @@ extern void my_llc_ch_map_req_ind (uint16_t conhdl, struct llcp_channel_map_req 
 struct gapm_start_advertise_cmd;
 extern uint8_t patched_gapm_adv_op_sanity(struct gapm_start_advertise_cmd *adv);
 
+extern uint8_t my_smpc_check_param(struct l2cc_pdu *pdu);
 #endif // __DA14581__
 
 /*
@@ -466,6 +471,8 @@ static const uint32_t * const patch_table[] =
     
 # if (BLE_HOST_PRESENT)
     [0] = (const uint32_t *) atts_read_resp_patch,
+    [2] = (const uint32_t *) my_smpc_check_pairing_feat,
+    [3] = (const uint32_t *) my_smpc_check_param,
 # else
     [0] = (const uint32_t *) llm_rd_local_supp_feats_cmd_handler,
 # endif
@@ -488,8 +495,8 @@ static const uint32_t * const patch_table[] =
     (const uint32_t *) log_ke_malloc,
     (const uint32_t *) log_ke_free,	
 # else    
-    (const uint32_t *) my_llc_con_update_req_ind,
-    (const uint32_t *) my_llc_ch_map_req_ind,	
+    (const uint32_t *) my_smpc_check_param,
+    (const uint32_t *) NULL,
 # endif        
     (const uint32_t *) patched_gapm_adv_op_sanity,
     
@@ -562,6 +569,12 @@ void patch_func(void)
         // smpc_default_state[8].func = &PATCHED_581_smpc_pairing_cfm_handler
         SetWord32(PATCH_ADDR2_REG, 0x00034538 + 8 * 8 + 4);
         SetWord32(PATCH_DATA2_REG, (uint32_t)&PATCHED_581_smpc_pairing_cfm_handler); //originally contained 0x0002d231 = the address of ROM function smpc_pairing_cfm_handler
+        //0x0002c8e7 smpc_check_pairing_feat
+        SetWord32(PATCH_ADDR3_REG, 0x0002c8e4);
+        SetWord32(PATCH_DATA3_REG, 0xdf02e7f5); //smpc_check_pairing_feat svc 2 
+        //0x00031949 smpc_check_param
+        SetWord32(PATCH_ADDR4_REG, 0x00031948);
+        SetWord32(PATCH_DATA4_REG, 0x4601df03); //smpc_check_param svc 3 
     }
     else
     {
@@ -625,13 +638,9 @@ void patch_func(void)
     }
     else
     {
-        //0x000233bf  llc_con_update_req_ind
-        SetWord32(PATCH_ADDR5_REG, 0x000233bc);
-        SetWord32(PATCH_DATA5_REG, 0xdf05bdf8); //llc_con_update_req_ind svc 5
-
-        //0x0002341b  llc_ch_map_req_ind
-        SetWord32(PATCH_ADDR6_REG, 0x00023418);
-        SetWord32(PATCH_DATA6_REG, 0xdf06bdf8); //llc_ch_map_req_ind svc 6
+        //0x00031b95  smpc_check_param
+        SetWord32(PATCH_ADDR5_REG, 0x00031b94);
+        SetWord32(PATCH_DATA5_REG, 0xb500df05); //smpc_check_param svc 5
     }
 
     //0x00030cef gapm_adv_op_sanity

@@ -27,10 +27,10 @@
 #include "app_findme.h"
 #include "app_proxr.h"
 #include "app_spotar.h"
-#include "user_spsc.h"
-#include "user_spsc_task.h"
+#include "user_spss.h"
+#include "user_spss_task.h"
 
-#include "user_sps_host.h"
+#include "user_sps_device.h"
 #include "app_prf_types.h"
 
 /*
@@ -83,12 +83,12 @@ static const struct app_callbacks user_app_callbacks = {
     .app_on_disconnect              = user_on_disconnect,
     .app_on_update_params_rejected  = NULL,
     .app_on_update_params_complete  = NULL,
-    .app_on_set_dev_config_complete = user_on_set_dev_config_complete,
-    .app_on_adv_undirect_complete   = NULL,
+    .app_on_set_dev_config_complete = default_app_on_set_dev_config_complete,
+    .app_on_adv_undirect_complete   = default_app_on_adv_undirect_complete,
     .app_on_adv_direct_complete     = NULL,
-    .app_on_db_init_complete        = NULL,
-    .app_on_scanning_completed      = user_on_scanning_completed,
-    .app_on_adv_report_ind          = user_on_adv_report_ind,
+    .app_on_db_init_complete        = default_app_on_db_init_complete,
+    .app_on_scanning_completed      = NULL,
+    .app_on_adv_report_ind          = NULL,
     .app_on_connect_failed          = user_on_connect_failed,
     .app_on_pairing_request         = default_app_on_pairing_request,
     .app_on_tk_exch_nomitm          = default_app_on_tk_exch_nomitm,
@@ -103,7 +103,7 @@ static const struct app_callbacks user_app_callbacks = {
 };
 
 static const struct default_app_operations user_default_app_operations = {
-    .default_operation_adv = NULL,
+    .default_operation_adv = default_advertise_operation,
 };
 
 static void (*const app_process_catch_rest_cb)(ke_msg_id_t const msgid, void const *param,
@@ -126,8 +126,8 @@ static const  struct arch_main_loop_callbacks user_app_main_loop_callbacks = {
 //for your reference of which profiles are supported.
 static const struct prf_func_callbacks user_prf_funcs[] =
 {
-#if (BLE_SPS_CLIENT)
-    {TASK_SPS_CLIENT, NULL, user_sps_enable},
+#if (BLE_SPS_SERVER)
+    {TASK_SPS_SERVER, user_sps_db_create, user_sps_enable},
 #endif //BLE_SPS_SERVER
     {TASK_NONE,    NULL, NULL}   // DO NOT MOVE. Must always be last
 };

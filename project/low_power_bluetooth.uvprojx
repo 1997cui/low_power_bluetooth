@@ -530,6 +530,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\sdk\platform\driver\systick\systick.c</FilePath>
             </File>
+            <File>
+              <FileName>uart2.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\sdk\platform\driver\uart\uart2.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -883,47 +888,47 @@
             <File>
               <FileName>da1458x_config_advanced.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\src\main\include\config\da1458x_config_advanced.h</FilePath>
+              <FilePath>..\src\sps\config\da1458x_config_advanced.h</FilePath>
             </File>
             <File>
               <FileName>da1458x_config_basic.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\src\main\include\config\da1458x_config_basic.h</FilePath>
+              <FilePath>..\src\sps\config\da1458x_config_basic.h</FilePath>
             </File>
             <File>
               <FileName>user_callback_config.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\src\main\include\config\user_callback_config.h</FilePath>
+              <FilePath>..\src\sps\config\user_callback_config.h</FilePath>
             </File>
             <File>
               <FileName>user_config.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\src\main\include\config\user_config.h</FilePath>
-            </File>
-            <File>
-              <FileName>user_modules_config.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\src\main\include\config\user_modules_config.h</FilePath>
-            </File>
-            <File>
-              <FileName>user_periph_setup.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\src\main\include\config\user_periph_setup.h</FilePath>
-            </File>
-            <File>
-              <FileName>user_profiles_config.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\src\main\include\config\user_profiles_config.h</FilePath>
+              <FilePath>..\src\sps\config\user_config.h</FilePath>
             </File>
             <File>
               <FileName>user_config_sw_ver.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\src\main\include\config\user_config_sw_ver.h</FilePath>
+              <FilePath>..\src\sps\config\user_config_sw_ver.h</FilePath>
             </File>
             <File>
               <FileName>user_custs_config.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\src\main\include\config\user_custs_config.h</FilePath>
+              <FilePath>..\src\sps\config\user_custs_config.h</FilePath>
+            </File>
+            <File>
+              <FileName>user_modules_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\sps\config\user_modules_config.h</FilePath>
+            </File>
+            <File>
+              <FileName>user_periph_setup.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\sps\config\user_periph_setup.h</FilePath>
+            </File>
+            <File>
+              <FileName>user_profiles_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\sps\config\user_profiles_config.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -1051,21 +1056,6 @@
           <GroupName>sps</GroupName>
           <Files>
             <File>
-              <FileName>user_sps_host.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\sps\user_sps_host.c</FilePath>
-            </File>
-            <File>
-              <FileName>user_spsc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\sps\user_spsc.c</FilePath>
-            </File>
-            <File>
-              <FileName>user_spsc_task.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\sps\user_spsc_task.c</FilePath>
-            </File>
-            <File>
               <FileName>user_periph_setup.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\sps\platform\user_periph_setup.c</FilePath>
@@ -1084,6 +1074,46 @@
               <FileName>uart_sps.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\sps\driver\uart_sps.c</FilePath>
+            </File>
+            <File>
+              <FileName>user_buffer.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\sps\user_buffer.h</FilePath>
+            </File>
+            <File>
+              <FileName>user_sps_device.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\sps\user_sps_device.c</FilePath>
+            </File>
+            <File>
+              <FileName>user_sps_device.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\sps\user_sps_device.h</FilePath>
+            </File>
+            <File>
+              <FileName>user_sps_scheduler.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\sps\user_sps_scheduler.h</FilePath>
+            </File>
+            <File>
+              <FileName>user_spss.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\sps\user_spss.c</FilePath>
+            </File>
+            <File>
+              <FileName>user_spss.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\sps\user_spss.h</FilePath>
+            </File>
+            <File>
+              <FileName>user_spss_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\sps\user_spss_task.c</FilePath>
+            </File>
+            <File>
+              <FileName>user_spss_task.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\sps\user_spss_task.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -1676,6 +1706,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\sdk\platform\driver\systick\systick.c</FilePath>
             </File>
+            <File>
+              <FileName>uart2.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\sdk\platform\driver\uart\uart2.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2029,47 +2064,47 @@
             <File>
               <FileName>da1458x_config_advanced.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\src\main\include\config\da1458x_config_advanced.h</FilePath>
+              <FilePath>..\src\sps\config\da1458x_config_advanced.h</FilePath>
             </File>
             <File>
               <FileName>da1458x_config_basic.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\src\main\include\config\da1458x_config_basic.h</FilePath>
+              <FilePath>..\src\sps\config\da1458x_config_basic.h</FilePath>
             </File>
             <File>
               <FileName>user_callback_config.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\src\main\include\config\user_callback_config.h</FilePath>
+              <FilePath>..\src\sps\config\user_callback_config.h</FilePath>
             </File>
             <File>
               <FileName>user_config.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\src\main\include\config\user_config.h</FilePath>
-            </File>
-            <File>
-              <FileName>user_modules_config.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\src\main\include\config\user_modules_config.h</FilePath>
-            </File>
-            <File>
-              <FileName>user_periph_setup.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\src\main\include\config\user_periph_setup.h</FilePath>
-            </File>
-            <File>
-              <FileName>user_profiles_config.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\src\main\include\config\user_profiles_config.h</FilePath>
+              <FilePath>..\src\sps\config\user_config.h</FilePath>
             </File>
             <File>
               <FileName>user_config_sw_ver.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\src\main\include\config\user_config_sw_ver.h</FilePath>
+              <FilePath>..\src\sps\config\user_config_sw_ver.h</FilePath>
             </File>
             <File>
               <FileName>user_custs_config.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\src\main\include\config\user_custs_config.h</FilePath>
+              <FilePath>..\src\sps\config\user_custs_config.h</FilePath>
+            </File>
+            <File>
+              <FileName>user_modules_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\sps\config\user_modules_config.h</FilePath>
+            </File>
+            <File>
+              <FileName>user_periph_setup.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\sps\config\user_periph_setup.h</FilePath>
+            </File>
+            <File>
+              <FileName>user_profiles_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\sps\config\user_profiles_config.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -2197,21 +2232,6 @@
           <GroupName>sps</GroupName>
           <Files>
             <File>
-              <FileName>user_sps_host.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\sps\user_sps_host.c</FilePath>
-            </File>
-            <File>
-              <FileName>user_spsc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\sps\user_spsc.c</FilePath>
-            </File>
-            <File>
-              <FileName>user_spsc_task.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\sps\user_spsc_task.c</FilePath>
-            </File>
-            <File>
               <FileName>user_periph_setup.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\sps\platform\user_periph_setup.c</FilePath>
@@ -2230,6 +2250,46 @@
               <FileName>uart_sps.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\sps\driver\uart_sps.c</FilePath>
+            </File>
+            <File>
+              <FileName>user_buffer.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\sps\user_buffer.h</FilePath>
+            </File>
+            <File>
+              <FileName>user_sps_device.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\sps\user_sps_device.c</FilePath>
+            </File>
+            <File>
+              <FileName>user_sps_device.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\sps\user_sps_device.h</FilePath>
+            </File>
+            <File>
+              <FileName>user_sps_scheduler.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\sps\user_sps_scheduler.h</FilePath>
+            </File>
+            <File>
+              <FileName>user_spss.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\sps\user_spss.c</FilePath>
+            </File>
+            <File>
+              <FileName>user_spss.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\sps\user_spss.h</FilePath>
+            </File>
+            <File>
+              <FileName>user_spss_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\sps\user_spss_task.c</FilePath>
+            </File>
+            <File>
+              <FileName>user_spss_task.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\sps\user_spss_task.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -2758,6 +2818,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\sdk\platform\driver\systick\systick.c</FilePath>
             </File>
+            <File>
+              <FileName>uart2.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\sdk\platform\driver\uart\uart2.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -3111,47 +3176,47 @@
             <File>
               <FileName>da1458x_config_advanced.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\src\main\include\config\da1458x_config_advanced.h</FilePath>
+              <FilePath>..\src\sps\config\da1458x_config_advanced.h</FilePath>
             </File>
             <File>
               <FileName>da1458x_config_basic.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\src\main\include\config\da1458x_config_basic.h</FilePath>
+              <FilePath>..\src\sps\config\da1458x_config_basic.h</FilePath>
             </File>
             <File>
               <FileName>user_callback_config.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\src\main\include\config\user_callback_config.h</FilePath>
+              <FilePath>..\src\sps\config\user_callback_config.h</FilePath>
             </File>
             <File>
               <FileName>user_config.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\src\main\include\config\user_config.h</FilePath>
-            </File>
-            <File>
-              <FileName>user_modules_config.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\src\main\include\config\user_modules_config.h</FilePath>
-            </File>
-            <File>
-              <FileName>user_periph_setup.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\src\main\include\config\user_periph_setup.h</FilePath>
-            </File>
-            <File>
-              <FileName>user_profiles_config.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\src\main\include\config\user_profiles_config.h</FilePath>
+              <FilePath>..\src\sps\config\user_config.h</FilePath>
             </File>
             <File>
               <FileName>user_config_sw_ver.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\src\main\include\config\user_config_sw_ver.h</FilePath>
+              <FilePath>..\src\sps\config\user_config_sw_ver.h</FilePath>
             </File>
             <File>
               <FileName>user_custs_config.h</FileName>
               <FileType>5</FileType>
-              <FilePath>..\src\main\include\config\user_custs_config.h</FilePath>
+              <FilePath>..\src\sps\config\user_custs_config.h</FilePath>
+            </File>
+            <File>
+              <FileName>user_modules_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\sps\config\user_modules_config.h</FilePath>
+            </File>
+            <File>
+              <FileName>user_periph_setup.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\sps\config\user_periph_setup.h</FilePath>
+            </File>
+            <File>
+              <FileName>user_profiles_config.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\sps\config\user_profiles_config.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -3279,21 +3344,6 @@
           <GroupName>sps</GroupName>
           <Files>
             <File>
-              <FileName>user_sps_host.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\sps\user_sps_host.c</FilePath>
-            </File>
-            <File>
-              <FileName>user_spsc.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\sps\user_spsc.c</FilePath>
-            </File>
-            <File>
-              <FileName>user_spsc_task.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\sps\user_spsc_task.c</FilePath>
-            </File>
-            <File>
               <FileName>user_periph_setup.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\sps\platform\user_periph_setup.c</FilePath>
@@ -3312,6 +3362,46 @@
               <FileName>uart_sps.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\sps\driver\uart_sps.c</FilePath>
+            </File>
+            <File>
+              <FileName>user_buffer.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\sps\user_buffer.h</FilePath>
+            </File>
+            <File>
+              <FileName>user_sps_device.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\sps\user_sps_device.c</FilePath>
+            </File>
+            <File>
+              <FileName>user_sps_device.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\sps\user_sps_device.h</FilePath>
+            </File>
+            <File>
+              <FileName>user_sps_scheduler.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\sps\user_sps_scheduler.h</FilePath>
+            </File>
+            <File>
+              <FileName>user_spss.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\sps\user_spss.c</FilePath>
+            </File>
+            <File>
+              <FileName>user_spss.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\sps\user_spss.h</FilePath>
+            </File>
+            <File>
+              <FileName>user_spss_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\sps\user_spss_task.c</FilePath>
+            </File>
+            <File>
+              <FileName>user_spss_task.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\src\sps\user_spss_task.h</FilePath>
             </File>
           </Files>
         </Group>

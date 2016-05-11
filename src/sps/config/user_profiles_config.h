@@ -36,7 +36,7 @@
  */
  
 /// Add below the profiles that the application wishes to use by including the <profile_name>.h file.
-#include "sps_client.h"
+#include "sps_server.h"
 
 /*
  * PROFILE CONFIGUARTION

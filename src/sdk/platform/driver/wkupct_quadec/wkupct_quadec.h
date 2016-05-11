@@ -5,25 +5,25 @@
  *
  * @brief Wakeup IRQ & Quadrature Decoder driver header file.
  *
- * Copyright (C) 2013. Dialog Semiconductor Ltd, unpublished work. This computer 
- * program includes Confidential, Proprietary Information and is a Trade Secret of 
- * Dialog Semiconductor Ltd.  All use, disclosure, and/or reproduction is prohibited 
+ * Copyright (C) 2013. Dialog Semiconductor Ltd, unpublished work. This computer
+ * program includes Confidential, Proprietary Information and is a Trade Secret of
+ * Dialog Semiconductor Ltd.  All use, disclosure, and/or reproduction is prohibited
  * unless authorized in writing. All Rights Reserved.
  *
  * <bluetooth.support@diasemi.com> and contributors.
  *
  ****************************************************************************************
  */
- 
- 
+
+
  /* Important note: WKUP_ENABLED and QUADEC_ENABLED control the inclusion of the parts of the
  *               code that add support for to wakeup timer and quadrature decoder respectively.
- */ 
- 
+ */
+
  /* Important note: If, upon reception of interrupt from the wakeup timer or the quadrature
  *                 decoder, the system resumes from sleep mode and you wish to resume peripherals
  *                 functionality , it is necessary to include in your interrupt handler function(s)
- *                 - the ones you register using wkupct_register_callback() and/or 
+ *                 - the ones you register using wkupct_register_callback() and/or
  *                                                quad_decoder_register_callback() -
  *                  the following lines:
  *
@@ -32,8 +32,8 @@
  *                    // and finally release the pad latches.
  *                    if(GetBits16(SYS_STAT_REG, PER_IS_DOWN))
  *                        periph_init();
- *                        
-*/   
+ *
+*/
 
 #ifndef _WKUPCT_QUADEC_H_
 #define _WKUPCT_QUADEC_H_
@@ -45,7 +45,6 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include "user_periph_setup.h"
 
 /*
  * DEFINES
@@ -58,55 +57,11 @@ enum
     SRC_QUAD_IRQ,
 };
 
-/*
- * TYPE DEFINITIONS
- ****************************************************************************************
- */
-
-typedef enum
-{
-    WKUPCT_QUADEC_ERR_RESERVED = -1,
-    WKUPCT_QUADEC_ERR_OK = 0,    
-} wkupct_quadec_error_t;
-
-typedef enum
-{
-    RESERVATION_STATUS_FREE = 0,
-    RESERVATION_STATUS_RESERVED_BY_UNIT_A,
-    RESERVATION_STATUS_RESERVED_BY_UNIT_B,    
-    RESERVATION_STATUS_RESERVED_BY_BOTH_UNITS,        
-} reservation_status_t;
-
-typedef union
-{
-    struct
-    {
-     bool reserved_by_wkupct:1;
-     bool reserved_by_quad:1;    
-    }reservations;
-    reservation_status_t reservation_status;
-}wkupct_quad_IRQ_status_t;
-
 enum
 {
     WKUPCT_PIN_POLARITY_HIGH = 0,  // the event counter is incremented if the respective input goes HIGH
     WKUPCT_PIN_POLARITY_LOW  = 1,  // the event counter is incremented if the respective input goes LOW
 };
-
-typedef void (*wakeup_handler_function_t)(void);
-
-/*
- * FUNCTION DECLARATIONS
- ****************************************************************************************
- */
-
-/**
- ****************************************************************************************
- * @brief Enable Wakeup IRQ.
- * @return void
- ****************************************************************************************
- */
-void wkupct_enable_irq(uint32_t sel_pins, uint32_t pol_pins, uint16_t events_num, uint16_t deb_time);
 
 /**
  ****************************************************************************************
@@ -154,18 +109,40 @@ void wkupct_enable_irq(uint32_t sel_pins, uint32_t pol_pins, uint16_t events_num
                                                                  )                                                           \
                                                  )
 
-/**
- ****************************************************************************************
- * @brief Register Callback function for Wakeup IRQ.
- * @param[in] callback Callback function's reference
- * @return void
+/*
+ * TYPE DEFINITIONS
  ****************************************************************************************
  */
-void wkupct_register_callback(wakeup_handler_function_t callback);
+
+typedef enum
+{
+    WKUPCT_QUADEC_ERR_RESERVED = -1,
+    WKUPCT_QUADEC_ERR_OK = 0,
+} wkupct_quadec_error_t;
+
+typedef enum
+{
+    RESERVATION_STATUS_FREE = 0,
+    RESERVATION_STATUS_RESERVED_BY_UNIT_A,
+    RESERVATION_STATUS_RESERVED_BY_UNIT_B,
+    RESERVATION_STATUS_RESERVED_BY_BOTH_UNITS,
+} reservation_status_t;
+
+typedef union
+{
+    struct
+    {
+     bool reserved_by_wkupct:1;
+     bool reserved_by_quad:1;
+    } reservations;
+    reservation_status_t reservation_status;
+} wkupct_quad_IRQ_status_t;
+
+typedef void (*wakeup_handler_function_t)(void);
 
 typedef void (*quad_encoder_handler_function_t)(int16_t qdec_xcnt_reg, int16_t qdec_ycnt_reg, int16_t qdec_zcnt_reg);
 
-typedef enum 
+typedef enum
 {
     QUAD_DEC_CHXA_NONE_AND_CHXB_NONE = 0,
     QUAD_DEC_CHXA_P00_AND_CHXB_P01 = 1,
@@ -177,10 +154,10 @@ typedef enum
     QUAD_DEC_CHXA_P23_AND_CHXB_P24 = 7,
     QUAD_DEC_CHXA_P25_AND_CHXB_P26 = 8,
     QUAD_DEC_CHXA_P27_AND_CHXB_P28 = 9,
-    QUAD_DEC_CHXA_P29_AND_CHXB_P20 = 10      
-}CHX_PORT_SEL_t;
+    QUAD_DEC_CHXA_P29_AND_CHXB_P20 = 10
+} CHX_PORT_SEL_t;
 
-typedef enum 
+typedef enum
 {
     QUAD_DEC_CHYA_NONE_AND_CHYB_NONE = 0<<4,
     QUAD_DEC_CHYA_P00_AND_CHYB_P01 = 1<<4,
@@ -192,10 +169,10 @@ typedef enum
     QUAD_DEC_CHYA_P23_AND_CHYB_P24 = 7<<4,
     QUAD_DEC_CHYA_P25_AND_CHYB_P26 = 8<<4,
     QUAD_DEC_CHYA_P27_AND_CHYB_P28 = 9<<4,
-    QUAD_DEC_CHYA_P29_AND_CHYB_P20 = 10<<4      
-}CHY_PORT_SEL_t;
+    QUAD_DEC_CHYA_P29_AND_CHYB_P20 = 10<<4
+} CHY_PORT_SEL_t;
 
-typedef enum 
+typedef enum
 {
     QUAD_DEC_CHZA_NONE_AND_CHZB_NONE = 0<<8,
     QUAD_DEC_CHZA_P00_AND_CHZB_P01 = 1<<8,
@@ -207,27 +184,30 @@ typedef enum
     QUAD_DEC_CHZA_P23_AND_CHZB_P24 = 7<<8,
     QUAD_DEC_CHZA_P25_AND_CHZB_P26 = 8<<8,
     QUAD_DEC_CHZA_P27_AND_CHZB_P28 = 9<<8,
-    QUAD_DEC_CHZA_P29_AND_CHZB_P20 = 10<<8      
-}CHZ_PORT_SEL_t;
+    QUAD_DEC_CHZA_P29_AND_CHZB_P20 = 10<<8
+} CHZ_PORT_SEL_t;
 
-
-typedef struct 
+typedef struct
 {
     CHX_PORT_SEL_t chx_port_sel;
-    CHY_PORT_SEL_t chy_port_sel;    
+    CHY_PORT_SEL_t chy_port_sel;
     CHZ_PORT_SEL_t chz_port_sel;
     uint16_t qdec_clockdiv;
     uint8_t qdec_events_count_to_trigger_interrupt;
-}QUAD_DEC_INIT_PARAMS_t;
+} QUAD_DEC_INIT_PARAMS_t;
 
+/*
+ * FUNCTION DECLARATIONS
+ ****************************************************************************************
+ */
 
 /**
  ****************************************************************************************
- * @brief Internal function to disable WKUP_QUADEC_IRQn only when both Quadrature.
- * @brief Decoder and Wakeup Timer have unregistered from using it
- * @return void WKUPCT_QUADEC_ERR_RESERVED, WKUPCT_QUADEC_ERR_OK
+ * @brief Internal function to disable WKUP_QUADEC_IRQn only when both Quadrature
+ * Decoder and Wakeup Timer have unregistered from using it.
+ * @return WKUPCT_QUADEC_ERR_RESERVED, WKUPCT_QUADEC_ERR_OK
  ****************************************************************************************
- */ 
+ */
 wkupct_quadec_error_t wkupct_quad_disable_IRQ(void);
 
 /**
@@ -235,16 +215,26 @@ wkupct_quadec_error_t wkupct_quad_disable_IRQ(void);
  * @brief WKUPCT IRQ Handler.
  * @return void
  ****************************************************************************************
- */ 
+ */
 void WKUP_QUADEC_Handler(void);
 
 /**
  ****************************************************************************************
  * @brief Enable Wakeup IRQ.
- * @param[in] sel_pins      Select enabled inputs. Bits 0-7 -> port 0(P00..P07), Bits 8-13 -> port 1(P10..P15), Bits 14-15 -> port 2(P28,P29), Bits -> 16-23 port 2(P00..P07), Bits 24-31 -> port 3(P30..P37). 0-disabled, 1-enabled.
- * @param[in] pol_pins      Inputs' polarity. Bits 0-7 -> port 0(P00..P07), Bits 8-13 -> port 1(P10..P15), Bits 14-15 -> port 2(P28,P29), Bits -> 16-23 port 2(P00..P07), Bits 24-31 -> port 3(P30..P37). 0-high, 1-low.
+ * @param[in] sel_pins      Select enabled inputs (0-disabled, 1-enabled)
+ *                          - Bits 0-7   -> port 0(P00..P07)
+ *                          - Bits 8-13  -> port 1(P10..P15)
+ *                          - Bits 14-15 -> port 2(P28,P29)
+ *                          - Bits 16-23 -> port 2(P00..P07)
+ *                          - Bits 24-31 -> port 3(P30..P37)
+ * @param[in] pol_pins      Inputs' polarity (0-high, 1-low)
+ *                          - Bits 0-7   -> port 0(P00..P07)
+ *                          - Bits 8-13  -> port 1(P10..P15)
+ *                          - Bits 14-15 -> port 2(P28,P29)
+ *                          - Bits 16-23 -> port 2(P00..P07
+ *                          - Bits 24-31 -> port 3(P30..P37)
  * @param[in] events_num    Number of events before wakeup interrupt. Max 255.
- * @param[in] deb_time      Debouncing time. Max 0x3F.
+ * @param[in] deb_time      Debouncing time. Max 0x3F (63 msec)
  * @return void
  ****************************************************************************************
  */
@@ -252,9 +242,10 @@ void wkupct_enable_irq(uint32_t sel_pins, uint32_t pol_pins, uint16_t events_num
 
 /**
  ****************************************************************************************
- * @brief Unregisters WKUP_QUADEC_IRQn use by Wakeup Timer and calls.
- * @brief wkupct_quad_disable_IRQ. Important Note: WKUP_QUADEC_IRQn interrupt will be
- * @brief disabled, only if also the Quadrature Decoder has unregistered from usin the IRQ.
+ * @brief Unregisters WKUP_QUADEC_IRQn use by Wakeup Timer and calls
+ * wkupct_quad_disable_IRQ.
+ * @note WKUP_QUADEC_IRQn interrupt will be disabled, only if also the Quadrature Decoder
+ * has unregistered from usin the IRQ.
  * @return WKUPCT_QUADEC_ERR_OK, WKUPCT_QUADEC_ERR_RESERVED
  ****************************************************************************************
  */
@@ -267,7 +258,7 @@ wkupct_quadec_error_t wkupct_disable_irq(void);
  * @return void
  ****************************************************************************************
  */
-inline void wkupct_register_callback(wakeup_handler_function_t callback);
+void wkupct_register_callback(wakeup_handler_function_t callback);
 
 /**
  ****************************************************************************************
@@ -326,16 +317,36 @@ int16_t quad_decoder_get_z_counter(void);
  * @return void
  ****************************************************************************************
  */
-inline void quad_decoder_enable_irq(uint8_t event_count);
+void quad_decoder_enable_irq(uint8_t event_count);
 
 /**
  ****************************************************************************************
- * @brief Unregisters WKUP_QUADEC_IRQn use by Quadrature Decoder and calls.
- * @brief wkupct_quad_disable_IRQ. Important Note: WKUP_QUADEC_IRQn interrupt will be
- * @brief disabled, only if also the Wakeup Timer has unregisterd from usin the IRQ.
+ * @brief Unregisters WKUP_QUADEC_IRQn use by Quadrature Decoder and calls
+ * wkupct_quad_disable_IRQ.
+ * @note WKUP_QUADEC_IRQn interrupt will be disabled, only if also the Wakeup Timer has
+ * unregisterd from usin the IRQ.
  * @return WKUPCT_QUADEC_ERR_OK, WKUPCT_QUADEC_ERR_RESERVED
  ****************************************************************************************
  */
-inline wkupct_quadec_error_t quad_decoder_disable_irq(void);
+wkupct_quadec_error_t quad_decoder_disable_irq(void);
+
+/**
+ ****************************************************************************************
+ * @brief Tweak wakeup timer debouncing time. It corrects the debouncing time when RCX is
+ * selected as the clock in sleep mode. Due to a silicon bug the wakeup timer debouncing
+ * time is multiplied by ~3 when the system is clocked by RCX in sleep mode.
+ * @note This function SHOULD BE called when the system is ready to enter sleep
+ * (tweak = true) to load the WKUP_CTRL_REG[WKUP_DEB_VALUE] with the recalculated 
+ * debouncing time value or when it comes out of sleep mode (tweak = false) to reload the 
+ * WKUP_CTRL_REG[WKUP_DEB_VALUE] with the initial programmed debouncing time value (stored 
+ * in the retention memory). The above software fix does not provide full guarantee that 
+ * it will remedy the silicon bug under all circumstances.
+ * @param[in] tweak If true the debouncing time will be corrected, otherwise the initial
+ *                  programmed debouncing time, stored in the retention memory, will be 
+ *                  set
+ * @return void
+ ****************************************************************************************
+ */
+void wkupct_tweak_deb_time(bool tweak);
 
 #endif // _WKUPCT_QUADEC_H_

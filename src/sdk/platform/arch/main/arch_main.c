@@ -20,8 +20,61 @@
  * INCLUDES
  ****************************************************************************************
  */
+#include "da1458x_scatter_config.h"
+#include "arch.h"
+#include "arch_api.h"
+#include <stdlib.h>
+#include <stddef.h>     // standard definitions
+#include <stdint.h>     // standard integer definition
+#include <stdbool.h>    // boolean definition
+#include "boot.h"       // boot definition
+#include "rwip.h"       // BLE initialization
+#include "syscntl.h"    // System control initialization
+#include "emi.h"        // EMI initialization
+#include "intc.h"       // Interrupt initialization
+#include "em_map_ble.h"
+#include "ke_mem.h"
+#include "ke_event.h"
+#include "user_periph_setup.h"
 
-#include "arch_main.h"
+#include "uart.h"   // UART initialization
+#include "nvds.h"   // NVDS initialization
+#include "rf.h"     // RF initialization
+#include "app.h"    // application functions
+#include "dbg.h"    // For dbg_warning function
+
+#include "global_io.h"
+
+#include "datasheet.h"
+
+#include "em_map_ble_user.h"
+#include "em_map_ble.h"
+
+#include "lld_sleep.h"
+#include "rwble.h"
+#include "rf_580.h"
+#include "gpio.h"
+
+#include "lld_evt.h"
+#include "arch_console.h"
+
+#include "arch_system.h"
+
+#include "arch_patch.h"
+
+// external function declarations
+void patch_llm_task(void);
+void patch_gtl_task(void);
+
+#if (BLE_MEM_LEAK_PATCH)
+    void patch_llc_task(void);
+#endif
+
+
+#include "arch_wdg.h"
+//#include "app_stream_queue.h"
+
+#include "user_callback_config.h"
 
 /**
  * @addtogroup DRIVERS
@@ -60,7 +113,34 @@ volatile uint8 descript[EM_SYSMEM_SIZE] __attribute__((section("BLE_exchange_mem
 bool sys_startup_flag __attribute__((section("retention_mem_area0"), zero_init));
 
 /*
+ * LOCAL FUNCTION DECLARATIONS
+ ****************************************************************************************
+ */
+static inline void otp_prepare(uint32 code_size);
+static inline bool ble_is_powered ( void );
+static inline void ble_turn_radio_off( void );
+static inline void schedule_while_ble_on( void );
+static inline sleep_mode_t ble_validate_sleep_mode(sleep_mode_t current_sleep_mode);
+static inline void arch_turn_peripherals_off (sleep_mode_t current_sleep_mode);
+static inline void arch_goto_sleep (sleep_mode_t current_sleep_mode);
+static inline void arch_switch_clock_goto_sleep (sleep_mode_t current_sleep_mode);
+static inline void arch_resume_from_sleep ( void );
+static inline sleep_mode_t rwip_power_down ( void );
+static inline bool app_asynch_trm(void);
+static inline bool app_asynch_proc(void);
+static inline void app_asynch_sleep_proc(void);
+static inline void app_sleep_prepare_proc(sleep_mode_t *sleep_mode);
+static inline void app_sleep_exit_proc( void );
+static inline void app_sleep_entry_proc(sleep_mode_t sleep_mode);
+
+
+/*
  * EXPORTED FUNCTION DEFINITIONS
+ ****************************************************************************************
+ */
+
+/*
+ * MAIN FUNCTION
  ****************************************************************************************
  */
 
@@ -70,13 +150,86 @@ extern bool fine_hit;
 
 /**
  ****************************************************************************************
+ * @brief BLE main function.
+ *
+ * This function is called right after the booting process has completed.
+ * It contains the main function loop.
+ ****************************************************************************************
+ */
+int main_func(void) __attribute__((noreturn));
+
+int main_func(void)
+{
+    sleep_mode_t sleep_mode;
+    
+    //global initialise
+    system_init();
+
+    /*
+     ************************************************************************************
+     * Platform initialization
+     ************************************************************************************
+     */
+    while(1)
+    {   
+        do {
+            // schedule all pending events
+            schedule_while_ble_on();
+        }
+        while ((app_asynch_proc()));    //grant control to the application, try to go to power down
+                                                              //if the application returns GOTO_SLEEP
+              //((STREAMDATA_QUEUE)&& stream_queue_more_data())); //grant control to the streamer, try to go to power down
+                                                                //if the application returns GOTO_SLEEP
+        //wait for interrupt and go to sleep if this is allowed
+		if (((!BLE_APP_PRESENT) && (check_gtl_state())) ||
+        	(BLE_APP_PRESENT))
+    	{
+    	 	 //Disable the interrupts
+            GLOBAL_INT_STOP();
+
+            app_asynch_sleep_proc();
+            
+            // get the allowed sleep mode
+            // time from rwip_power_down() to WFI() must be kept as short as possible!!
+            sleep_mode = rwip_power_down();
+            
+            if ((sleep_mode == mode_ext_sleep) || (sleep_mode == mode_deep_sleep)) {
+            	//power down the radio and whatever is allowed
+            	arch_goto_sleep(sleep_mode);
+
+            	//wait for an interrupt to resume operation
+                WFI();
+
+                //resume operation
+                arch_resume_from_sleep();
+            }
+            else if (sleep_mode == mode_idle)
+            {
+            	if (((!BLE_APP_PRESENT) && check_gtl_state()) ||
+            		(BLE_APP_PRESENT))
+            		//wait for an interrupt to resume operation
+                    WFI();    
+            }
+            // restore interrupts
+            GLOBAL_INT_START();
+        }
+        
+     if (USE_WDOG)
+    	 wdg_reload(WATCHDOG_DEFAULT_PERIOD);
+    }
+}
+
+
+
+/**
+ ****************************************************************************************
  * @brief  Power down the BLE Radio and whatever is allowed according to the sleep mode and
  *         the state of the system and application
  * @param[in] current_sleep_mode The current sleep mode proposed by the application.
  * @return void
  ****************************************************************************************
  */
-void arch_goto_sleep (sleep_mode_t current_sleep_mode)
+static inline void arch_goto_sleep (sleep_mode_t current_sleep_mode)
 {
     sleep_mode_t sleep_mode = current_sleep_mode;
 
@@ -113,7 +266,7 @@ void arch_goto_sleep (sleep_mode_t current_sleep_mode)
  ****************************************************************************************
  */
 
-void arch_switch_clock_goto_sleep (sleep_mode_t current_sleep_mode)
+static inline void arch_switch_clock_goto_sleep (sleep_mode_t current_sleep_mode)
 {
 	if ( (current_sleep_mode == mode_ext_sleep) || (current_sleep_mode == mode_deep_sleep) )
 	{
@@ -142,7 +295,7 @@ void arch_switch_clock_goto_sleep (sleep_mode_t current_sleep_mode)
  * @return void
  ****************************************************************************************
  */
-void arch_resume_from_sleep ( void )
+static inline void arch_resume_from_sleep ( void )
 {
 
 		// hook for app specific tasks just after waking up
@@ -159,7 +312,7 @@ void arch_resume_from_sleep ( void )
 		SCB->SCR &= ~(1<<2);
 }
 
-bool ble_is_powered ()
+static inline bool ble_is_powered ()
 {
 	return ( (GetBits16(CLK_RADIO_REG, BLE_ENABLE) == 1) && \
 			 (GetBits32(BLE_DEEPSLCNTL_REG, DEEP_SLEEP_STAT) == 0) && \
@@ -173,7 +326,7 @@ bool ble_is_powered ()
  * @return void
  ****************************************************************************************
  */
-void schedule_while_ble_on(void)
+static inline  void schedule_while_ble_on(void)
 {
     // BLE clock is enabled
 	while (ble_is_powered()) {
@@ -217,7 +370,7 @@ void schedule_while_ble_on(void)
  * @return sleep_mode_t return the current sleep mode
  ****************************************************************************************
  */
-sleep_mode_t rwip_power_down ( void )
+static inline sleep_mode_t rwip_power_down ( void )
 {
 	sleep_mode_t sleep_mode;
     // if app has turned sleep off, rwip_sleep() will act accordingly
@@ -242,7 +395,7 @@ sleep_mode_t rwip_power_down ( void )
  * @return sleep_mode_t return the allowable sleep mode
  ****************************************************************************************
  */
-void ble_turn_radio_off( void )
+static inline void ble_turn_radio_off( void )
 {
 	 SetBits16(PMU_CTRL_REG, RADIO_SLEEP, 1); // turn off radio
 }
@@ -254,7 +407,7 @@ void ble_turn_radio_off( void )
  * @return sleep_mode_t return the allowable sleep mode
  ****************************************************************************************
  */
-sleep_mode_t ble_validate_sleep_mode(sleep_mode_t current_sleep_mode)
+static inline sleep_mode_t ble_validate_sleep_mode(sleep_mode_t current_sleep_mode)
 {
 	sleep_mode_t sleep_mode=current_sleep_mode;
 
@@ -287,7 +440,7 @@ sleep_mode_t ble_validate_sleep_mode(sleep_mode_t current_sleep_mode)
  * @return void
  ****************************************************************************************
  */
-void arch_turn_peripherals_off (sleep_mode_t current_sleep_mode)
+static inline void arch_turn_peripherals_off (sleep_mode_t current_sleep_mode)
 {
 if (current_sleep_mode == mode_ext_sleep || current_sleep_mode == mode_deep_sleep)
 {
@@ -316,7 +469,7 @@ if (current_sleep_mode == mode_ext_sleep || current_sleep_mode == mode_deep_slee
  * About: Prepare OTP Controller in order to be able to reload SysRAM at the next power-up
  ****************************************************************************************
  */
-void  otp_prepare(uint32 code_size)
+static inline void  otp_prepare(uint32 code_size)
 {
     // Enable OPTC clock in order to have access
     SetBits16 (CLK_AMBA_REG, OTP_ENABLE, 1);
@@ -342,7 +495,7 @@ void  otp_prepare(uint32 code_size)
  ****************************************************************************************
  */
 
-bool app_asynch_trm(void)
+static inline bool app_asynch_trm(void)
 {
 
     if (user_app_main_loop_callbacks.app_on_ble_powered !=NULL)
@@ -362,7 +515,7 @@ bool app_asynch_trm(void)
  ****************************************************************************************
  */
 
-bool app_asynch_proc(void)
+static inline bool app_asynch_proc(void)
 {
 
     if (user_app_main_loop_callbacks.app_on_sytem_powered !=NULL)
@@ -379,7 +532,7 @@ bool app_asynch_proc(void)
  * @return void
  ****************************************************************************************
  */
-void app_asynch_sleep_proc(void)
+static inline void app_asynch_sleep_proc(void)
 {
 
     if (user_app_main_loop_callbacks.app_before_sleep !=NULL)
@@ -398,7 +551,7 @@ void app_asynch_sleep_proc(void)
  ****************************************************************************************
  */
 
-void app_sleep_prepare_proc(sleep_mode_t *sleep_mode)
+static inline void app_sleep_prepare_proc(sleep_mode_t *sleep_mode)
 {
 
     if (user_app_main_loop_callbacks.app_validate_sleep !=NULL)
@@ -418,7 +571,7 @@ void app_sleep_prepare_proc(sleep_mode_t *sleep_mode)
  ****************************************************************************************
  */
 
-void app_sleep_entry_proc(sleep_mode_t sleep_mode)
+static inline void app_sleep_entry_proc(sleep_mode_t sleep_mode)
 {
 
       if (user_app_main_loop_callbacks.app_going_to_sleep !=NULL)
@@ -437,7 +590,7 @@ void app_sleep_entry_proc(sleep_mode_t sleep_mode)
  ****************************************************************************************
  */
 
-void app_sleep_exit_proc( void )
+static inline void app_sleep_exit_proc( void )
 {
 
   if (user_app_main_loop_callbacks.app_resume_from_sleep !=NULL)

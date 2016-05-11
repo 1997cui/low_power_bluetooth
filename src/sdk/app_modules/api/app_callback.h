@@ -42,7 +42,7 @@ struct app_callbacks{
     void (*app_on_adv_undirect_complete) (const uint8_t);
     void (*app_on_adv_direct_complete) (const uint8_t);
     void (*app_on_db_init_complete)(void);
-    void (*app_on_scanning_completed)(void);
+    void (*app_on_scanning_completed)(const uint8_t);
     void (*app_on_adv_report_ind)(struct gapm_adv_report_ind const *);
     void (*app_on_connect_failed)(void);
     void (*app_on_pairing_request) (uint8_t const, struct gapc_bond_req_ind const *);

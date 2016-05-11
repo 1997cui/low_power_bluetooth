@@ -28,7 +28,6 @@
     #include "arch.h"
     #include "da1458x_periph_setup.h"
     #include "i2c_eeprom.h"
-
 /*
  * DEFINES
  ****************************************************************************************

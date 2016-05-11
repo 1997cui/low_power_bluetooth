@@ -22,25 +22,29 @@
  * INCLUDE FILES
  ****************************************************************************************
  */
+
 #include <string.h>      // string definitions
 #include <stddef.h>      // standard definitions
 #include "nvds.h"        // nvds definitions
 #include "arch.h"        // main
 #include "co_math.h"     // math operations
 #include "co_bt.h"
-
 #include "rwip_config.h"
 #include "user_config.h"
 
+/*
+ * LOCAL VARIABLES
+ ****************************************************************************************
+ */
 
 const struct nvds_data_struct nvds_data_storage __attribute__((section("nvds_data_storage_area")))
 #ifdef CFG_INITIALIZE_NVDS_STRUCT
-=	{
-    .NVDS_VALIDATION_FLAG                   = ( BD_ADDRESS_VALID | DEVICE_NAME_VALID | LPCLK_DRIFT_VALID | APP_BLE_ADV_DATA_VALID \
-                                                        | APP_BLE_SCAN_RESP_DATA_VALID | UART_BAUDRATE_VALID | SLEEP_ENABLE_VALID | EXT_WAKEUP_ENABLE_VALID \
-                                                        | DIAG_BLE_HW_VALID | DIAG_SW_VALID | SECURITY_ENABLE_VALID | NEB_ID_VALID \
-                                                        | NVDS_BLE_CA_TIMER_DUR_VALID | NVDS_BLE_CRA_TIMER_DUR_VALID | NVDS_BLE_CA_MIN_RSSI_VALID | NVDS_BLE_CA_NB_PKT_VALID \
-                                                        | NVDS_BLE_CA_NB_BAD_PKT_VALID),
+=   {
+    .NVDS_VALIDATION_FLAG                   = (BD_ADDRESS_VALID | DEVICE_NAME_VALID | LPCLK_DRIFT_VALID | APP_BLE_ADV_DATA_VALID \
+                                              | APP_BLE_SCAN_RESP_DATA_VALID | UART_BAUDRATE_VALID | SLEEP_ENABLE_VALID | EXT_WAKEUP_ENABLE_VALID \
+                                              | DIAG_BLE_HW_VALID | DIAG_SW_VALID | SECURITY_ENABLE_VALID | NEB_ID_VALID \
+                                              | NVDS_BLE_CA_TIMER_DUR_VALID | NVDS_BLE_CRA_TIMER_DUR_VALID | NVDS_BLE_CA_MIN_RSSI_VALID | NVDS_BLE_CA_NB_PKT_VALID \
+                                              | NVDS_BLE_CA_NB_BAD_PKT_VALID),
     .NVDS_TAG_UART_BAUDRATE                 = 115200,
     .NVDS_TAG_DIAG_SW                       = 0,
     .NVDS_TAG_DIAG_BLE_HW                   = 0,
@@ -49,19 +53,19 @@ const struct nvds_data_struct nvds_data_storage __attribute__((section("nvds_dat
     .NVDS_TAG_SLEEP_ENABLE                  = 1,
     .NVDS_TAG_EXT_WAKEUP_ENABLE             = 0,
     .NVDS_TAG_SECURITY_ENABLE               = 1,
-    .NVDS_TAG_APP_BLE_ADV_DATA              = USER_ADVERTISE_DATA,                                                                                      // Output power @ 1 meter
+    .NVDS_TAG_APP_BLE_ADV_DATA              = USER_ADVERTISE_DATA,
     .NVDS_TAG_APP_BLE_SCAN_RESP_DATA        = USER_ADVERTISE_SCAN_RESPONSE_DATA,
     .NVDS_TAG_DEVICE_NAME                   = USER_DEVICE_NAME,
     .NVDS_TAG_BD_ADDRESS                    = CFG_NVDS_TAG_BD_ADDRESS,
     .ADV_DATA_TAG_LEN                       = USER_ADVERTISE_DATA_LEN,
-    .SCAN_RESP_DATA_TAG_LEN                 = USER_ADVERTISE_SCAN_RESPONSE_DATA_LEN,	
+    .SCAN_RESP_DATA_TAG_LEN                 = USER_ADVERTISE_SCAN_RESPONSE_DATA_LEN,
     .DEVICE_NAME_TAG_LEN                    = USER_DEVICE_NAME_LEN,
     /// Default Channel Assessment Timer duration (20s - Multiple of 10ms)
     .NVDS_TAG_BLE_CA_TIMER_DUR              = CFG_NVDS_TAG_BLE_CA_TIMER_DUR,
     /// Default Channel Reassessment Timer duration (Multiple of Channel Assessment Timer duration)
     .NVDS_TAG_BLE_CRA_TIMER_DUR             = CFG_NVDS_TAG_BLE_CRA_TIMER_DUR,
     /// Default Minimal RSSI Threshold - -48dBm
-    .NVDS_TAG_BLE_CA_MIN_RSSI               = CFG_NVDS_TAG_BLE_CA_MIN_RSSI,     //0xD0,
+    .NVDS_TAG_BLE_CA_MIN_RSSI               = CFG_NVDS_TAG_BLE_CA_MIN_RSSI,
     /// Default number of packets to receive for statistics
     .NVDS_TAG_BLE_CA_NB_PKT                 = CFG_NVDS_TAG_BLE_CA_NB_PKT,
     /// Default number of bad packets needed to remove a channel
@@ -72,14 +76,19 @@ const struct nvds_data_struct nvds_data_storage __attribute__((section("nvds_dat
 
 /// Device BD address
 struct bd_addr dev_bdaddr __attribute__((section("retention_mem_area0"), zero_init));
+
 extern struct nvds_data_struct *nvds_data_ptr;
 
+/*
+ * FUNCTION DEFINITIONS
+ ****************************************************************************************
+ */
 
-uint8_t custom_nvds_get_func(uint8_t tag, nvds_tag_len_t * lengthPtr, uint8_t *buf)
+uint8_t custom_nvds_get_func(uint8_t tag, nvds_tag_len_t *lengthPtr, uint8_t *buf)
 {
     // declaration of ROM function nvds_get_func()
-    uint8_t nvds_get_func(uint8_t tag, nvds_tag_len_t * lengthPtr, uint8_t *buf);
-    
+    uint8_t nvds_get_func(uint8_t tag, nvds_tag_len_t *lengthPtr, uint8_t *buf);
+
     switch (tag)
     {
         case NVDS_TAG_BD_ADDRESS:
@@ -87,29 +96,29 @@ uint8_t custom_nvds_get_func(uint8_t tag, nvds_tag_len_t * lengthPtr, uint8_t *b
             //check if dev_bdaddr is not zero
             if(memcmp(&dev_bdaddr, &co_null_bdaddr, NVDS_LEN_BD_ADDRESS))
             {
-                memcpy(buf,&dev_bdaddr,NVDS_LEN_BD_ADDRESS);
+                memcpy(buf, &dev_bdaddr, NVDS_LEN_BD_ADDRESS);
                 *lengthPtr = NVDS_LEN_BD_ADDRESS;
                 return NVDS_OK;
             }
             break;
         }
-        
+
         case NVDS_TAG_APP_BLE_SCAN_RESP_DATA:
-			if (nvds_data_ptr->NVDS_VALIDATION_FLAG & APP_BLE_SCAN_RESP_DATA_VALID)
-			{
-				if (*lengthPtr < NVDS_LEN_APP_BLE_SCAN_RESP_DATA)
-                {		
-					*lengthPtr = 0;
+            if (nvds_data_ptr->NVDS_VALIDATION_FLAG & APP_BLE_SCAN_RESP_DATA_VALID)
+            {
+                if (*lengthPtr < NVDS_LEN_APP_BLE_SCAN_RESP_DATA)
+                {
+                    *lengthPtr = 0;
                     return (NVDS_LENGTH_OUT_OF_RANGE);
                 }
-                else 
+                else
                 {
-                    memcpy(buf,nvds_data_ptr->NVDS_TAG_APP_BLE_SCAN_RESP_DATA,nvds_data_ptr->SCAN_RESP_DATA_TAG_LEN);
+                    memcpy(buf, nvds_data_ptr->NVDS_TAG_APP_BLE_SCAN_RESP_DATA, nvds_data_ptr->SCAN_RESP_DATA_TAG_LEN);
                     *lengthPtr = nvds_data_ptr->SCAN_RESP_DATA_TAG_LEN;
                     return(NVDS_OK);
                 }
             }
-            else 
+            else
                 return(NVDS_FAIL);
             default: break;
     }
@@ -123,25 +132,25 @@ void nvds_read_bdaddr_from_otp()
     const uint16_t BDADDR_OFFSET = 0x7fd4; // offset of BD address in OTP header
     uint8_t *otp_bdaddr;
 
-    if (!APP_BOOT_FROM_OTP)    
+    if (!APP_BOOT_FROM_OTP)
     {
         int cnt = 100000;
         #define XPMC_MODE_MREAD   0x1
         otp_bdaddr = (uint8_t *)0x40000 + BDADDR_OFFSET;   //where in OTP header is BDADDR
-        
-        SetBits16(CLK_AMBA_REG, OTP_ENABLE, 1);		// enable OTP clock	
+
+        SetBits16(CLK_AMBA_REG, OTP_ENABLE, 1);		// enable OTP clock
         while ((GetWord16(ANA_STATUS_REG) & LDO_OTP_OK) != LDO_OTP_OK && cnt--)
             /* Just wait */;
-            
-        // set OTP in read mode 
+
+        // set OTP in read mode
         SetWord32(OTPC_MODE_REG, XPMC_MODE_MREAD);
     }
     else
         otp_bdaddr = (uint8_t *)0x20000000 + BDADDR_OFFSET;   //where in OTP header is BDADDR
 
-    
+
     memcpy(&dev_bdaddr, otp_bdaddr, sizeof(dev_bdaddr));
-    SetBits16(CLK_AMBA_REG, OTP_ENABLE, 0);     //disable OTP clock    
+    SetBits16(CLK_AMBA_REG, OTP_ENABLE, 0);     //disable OTP clock
 }
 
 
@@ -225,6 +234,4 @@ static void da14583_spi_flash_release(void)
 }
 #endif // defined(__DA14583__) && !(BDADDR_FROM_DA14583_FLASH_DISABLED)
 
-
 /// @} NVDS
-
