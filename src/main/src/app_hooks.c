@@ -56,10 +56,10 @@ void  App_TaskDelHook (OS_TCB *ptcb)
 #if OS_VERSION >= 251
 void  App_TaskIdleHook (void)
 {
-#if OS_CRITICAL_METHOD == 3u                     /* Allocate storage for CPU status register           */
+/*
+#if OS_CRITICAL_METHOD == 3u
     OS_CPU_SR  cpu_sr = 0u;
 #endif
-	/*
 	OS_ENTER_CRITICAL();
 
 	app_asynch_sleep_proc();

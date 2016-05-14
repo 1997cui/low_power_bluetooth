@@ -66,6 +66,22 @@
         #define  GPIO_UART2_RX_PORT     GPIO_PORT_1
         #define  GPIO_UART2_RX_PIN      GPIO_PIN_3
     #endif
+
+/****************************************************************************************/
+/* LED configuration                                                                    */
+/****************************************************************************************/
+
+    #if HW_CONFIG_BASIC_DK
+        #define GPIO_LED_PORT     GPIO_PORT_1
+        #define GPIO_LED_PIN      GPIO_PIN_0
+    #elif HW_CONFIG_PRO_DK
+        #define GPIO_LED_PORT     GPIO_PORT_1
+        #define GPIO_LED_PIN      GPIO_PIN_0
+    #else // HW_CONFIG_EXPERT_DK
+        #define GPIO_LED_PORT     GPIO_PORT_0
+        #define GPIO_LED_PIN      GPIO_PIN_7
+    #endif
+
 /*
  * FUNCTION DECLARATIONS
  ****************************************************************************************
