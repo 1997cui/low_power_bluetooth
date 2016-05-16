@@ -1,4 +1,4 @@
-;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Sat May 14 11:14:24 2016
+;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Mon May 16 17:44:30 2016
 ;VERSION 0.2
 ;FILE adc.o
 adc_calibrate <= USED 0
@@ -120,7 +120,9 @@ batt_cal_aaa <= USED 0
 batt_cal_cr1225 <= USED 0
 batt_cal_cr2032 <= USED 0
 battery_get_lvl <= USED 0
+;FILE ble_queue.o
 ;FILE ble_service.o
+ble_service_task <= USED 0
 ;FILE boot_vectors.o
 ;FILE ch_map.obj
 ;FILE gapm_util.obj
@@ -189,9 +191,7 @@ OSTaskQuery <= USED 0
 OSTaskRegGet <= USED 0
 OSTaskRegGetID <= USED 0
 OSTaskRegSet <= USED 0
-OSTaskResume <= USED 0
 OSTaskStkChk <= USED 0
-OSTaskSuspend <= USED 0
 ;FILE os_time.o
 OSTimeDlyResume <= USED 0
 OSTimeGet <= USED 0
@@ -265,13 +265,20 @@ uart2_flow_on <= USED 0
 uart2_init <= USED 0
 uart2_read <= USED 0
 uart2_write <= USED 0
-;FILE uart_sps_1.o
+;FILE uart_sps.o
 uart_sps_fifo_check <= USED 0
 uart_sps_finish_transfers <= USED 0
 uart_sps_get_tx_buffer_size <= USED 0
 ;FILE user_buffer.o
 user_buffer_read_items <= USED 0
-;FILE user_periph_setup_1.o
+;FILE user_periph_setup.o
+;FILE user_profile.o
+user_app_adv_start <= USED 0
+user_app_adv_undirect_complete <= USED 0
+user_app_connection <= USED 0
+user_app_disconnect <= USED 0
+user_app_init <= USED 0
+user_catch_rest_hndl <= USED 0
 ;FILE user_sps_device.o
 user_before_sleep <= USED 0
 user_on_system_powered <= USED 0

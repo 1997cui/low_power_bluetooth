@@ -4,13 +4,21 @@
 
 void ble_service_task(void * p)
 {
-    OS_EVENT *ble_service_queue = (OS_EVENT *)p;
-	
+  OS_EVENT *queue = (OS_EVENT *)p;
 	INT8U err;
 	
 	while (true)
 	{
-		schedule_while_ble_on();
-		OSQPend(ble_service_queue, 100, &err);
+		struct ble_content *content = (struct ble_content *)OSQPend(queue, 100, &err);
+		
+		if (content != NULL)
+		{
+			if (content->content[2])
+			{
+				GPIO_SetActive(GPIO_LED_PORT, GPIO_LED_PIN);
+			}
+			
+			OSTaskSuspend(OS_PRIO_SELF);
+		}
 	}
 }

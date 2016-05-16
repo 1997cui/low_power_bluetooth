@@ -1035,6 +1035,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\main\src\ble_service.c</FilePath>
             </File>
+            <File>
+              <FileName>ble_queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\ble_queue.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2245,6 +2250,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\main\src\ble_service.c</FilePath>
             </File>
+            <File>
+              <FileName>ble_queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\ble_queue.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -3326,6 +3336,11 @@
               <FileName>ble_service.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\main\src\ble_service.c</FilePath>
+            </File>
+            <File>
+              <FileName>ble_queue.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\ble_queue.c</FilePath>
             </File>
           </Files>
         </Group>

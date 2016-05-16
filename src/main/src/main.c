@@ -2,7 +2,7 @@
 #include "arch_main.h"
 #include "tasks.h"
 
-int main_func(void)
+void main_func(void)
 {
     //global initialise
     system_init();
