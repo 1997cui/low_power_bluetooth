@@ -1038,7 +1038,7 @@
             <File>
               <FileName>ble_queue.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\ble_queue.c</FilePath>
+              <FilePath>..\src\main\src\ble_queue.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2253,7 +2253,7 @@
             <File>
               <FileName>ble_queue.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\ble_queue.c</FilePath>
+              <FilePath>..\src\main\src\ble_queue.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -3340,7 +3340,7 @@
             <File>
               <FileName>ble_queue.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\ble_queue.c</FilePath>
+              <FilePath>..\src\main\src\ble_queue.c</FilePath>
             </File>
           </Files>
         </Group>
