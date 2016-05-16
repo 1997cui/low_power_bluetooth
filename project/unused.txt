@@ -1,4 +1,4 @@
-;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Mon May 16 17:44:30 2016
+;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Mon May 16 21:25:01 2016
 ;VERSION 0.2
 ;FILE adc.o
 adc_calibrate <= USED 0
@@ -162,6 +162,12 @@ OSFlagPend <= USED 0
 OSFlagPendGetFlagsRdy <= USED 0
 OSFlagPost <= USED 0
 OSFlagQuery <= USED 0
+;FILE os_mbox.o
+OSMboxAccept <= USED 0
+OSMboxDel <= USED 0
+OSMboxPendAbort <= USED 0
+OSMboxPostOpt <= USED 0
+OSMboxQuery <= USED 0
 ;FILE os_mutex.o
 OSMutexAccept <= USED 0
 OSMutexCreate <= USED 0
@@ -272,13 +278,6 @@ uart_sps_get_tx_buffer_size <= USED 0
 ;FILE user_buffer.o
 user_buffer_read_items <= USED 0
 ;FILE user_periph_setup.o
-;FILE user_profile.o
-user_app_adv_start <= USED 0
-user_app_adv_undirect_complete <= USED 0
-user_app_connection <= USED 0
-user_app_disconnect <= USED 0
-user_app_init <= USED 0
-user_catch_rest_hndl <= USED 0
 ;FILE user_sps_device.o
 user_before_sleep <= USED 0
 user_on_system_powered <= USED 0

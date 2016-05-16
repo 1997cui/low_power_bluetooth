@@ -41,6 +41,9 @@
 #include "user_sps_scheduler.h"
 
 #include "arch_console.h"
+
+//Add uC/OS
+#include "tasks.h"
 /*
  * FUNCTION DEFINITIONS
  ****************************************************************************************
@@ -162,6 +165,11 @@ int user_sps_server_data_rx_ind_handler(ke_msg_id_t const msgid,
                                       ke_task_id_t const dest_id,
                                       ke_task_id_t const src_id)
 {
+	  
+	  
+		//bao li da fa hao
+	  OSMboxPost(ble_data_ptr, (void *)param);
+	
     user_ble_push((uint8_t *)param->data, param->length);
 
     return (KE_MSG_CONSUMED);
