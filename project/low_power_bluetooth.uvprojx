@@ -928,16 +928,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>user_app</GroupName>
-          <Files>
-            <File>
-              <FileName>user_profile.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\main\src\user_profile.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>ucosii</GroupName>
           <Files>
             <File>
@@ -2143,16 +2133,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>user_app</GroupName>
-          <Files>
-            <File>
-              <FileName>user_profile.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\main\src\user_profile.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>ucosii</GroupName>
           <Files>
             <File>
@@ -3226,16 +3206,6 @@
               <FileName>user_profiles_config.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\src\sps\config\user_profiles_config.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>user_app</GroupName>
-          <Files>
-            <File>
-              <FileName>user_profile.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\main\src\user_profile.c</FilePath>
             </File>
           </Files>
         </Group>
