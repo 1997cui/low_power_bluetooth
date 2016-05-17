@@ -12,7 +12,7 @@ void ble_queue_task(void *p)
 	for (;;)
 	{
 		INT8U *message = (INT8U *)(&attempt);
-		struct ble_content led_message = *((struct ble_content *)message);
+		struct ble_content led_message = *((struct ble_content *)OSMboxPend(ble_data_ptr, 100, &err));
 		
 		if (!strcmp(led_message.name, LED_NAME))
 		{

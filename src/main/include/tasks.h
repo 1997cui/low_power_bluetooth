@@ -26,4 +26,6 @@ struct ble_content
 	INT8U content[32];
 };
 
+// ble data mailbox
+static OS_EVENT *ble_data_ptr;
 #endif
