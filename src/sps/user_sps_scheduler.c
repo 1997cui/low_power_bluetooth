@@ -271,6 +271,8 @@ void user_ble_push(uint8_t* wrdata, uint16_t write_amount)
 {
     bool send_flow_off = false;
     
+	user_send_ble_data(wrdata, write_amount);
+	
     //write items to buffer;
     user_buffer_write_items(&ble_to_periph_buffer, wrdata, write_amount);
     

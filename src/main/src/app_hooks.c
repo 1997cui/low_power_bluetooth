@@ -56,6 +56,9 @@ void  App_TaskDelHook (OS_TCB *ptcb)
 #if OS_VERSION >= 251
 void  App_TaskIdleHook (void)
 {
+	schedule_while_ble_on();
+    user_ble_pull(true, NULL);
+
 /*
 #if OS_CRITICAL_METHOD == 3u
     OS_CPU_SR  cpu_sr = 0u;
