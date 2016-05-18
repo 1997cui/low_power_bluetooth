@@ -11,13 +11,13 @@ void ble_receive_task(void *p)
 	
 	for (;;)
 	{
-		uint8_t state = UNFINISHED;
-		struct ble_content *message_ptr, ble_message;
+		uint8_t state = UNFINISHED, err;
+		ble_content *message_ptr, ble_message;
 		uint16_t sum_length = 0;
 		
 		while (state == UNFINISHED)
 		{
-			if ((message_ptr = (struct ble_content *)OSMboxPend(ble_data_ptr, 100, &err)) == NULL)
+			if ((message_ptr = (ble_content *)OSMboxPend(ble_data_ptr, 100, &err)) == NULL)
 			{
 				continue;
 			}

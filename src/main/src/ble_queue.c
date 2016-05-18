@@ -5,10 +5,11 @@
 void ble_queue_task(void *p)
 {
 	p = p;
+	INT8U err;
 	
 	for (;;)
 	{
-		uint8_t *content = (uint8_t)OSQPend(queue, 100, &err);
+		uint8_t *content = (uint8_t *)OSQPend(ble_receive_q, 100, &err);
 		
 		if (content != NULL && content[1] == 'l')	//led_task
 		{

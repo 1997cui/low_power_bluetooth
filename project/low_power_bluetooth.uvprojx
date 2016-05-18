@@ -1021,11 +1021,6 @@
               <FilePath>..\src\main\src\app_hooks.c</FilePath>
             </File>
             <File>
-              <FileName>ble_service.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\main\src\ble_service.c</FilePath>
-            </File>
-            <File>
               <FileName>ble_queue.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\main\src\ble_queue.c</FilePath>
@@ -2231,11 +2226,6 @@
               <FilePath>..\src\main\src\app_hooks.c</FilePath>
             </File>
             <File>
-              <FileName>ble_service.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\main\src\ble_service.c</FilePath>
-            </File>
-            <File>
               <FileName>ble_queue.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\main\src\ble_queue.c</FilePath>
@@ -3311,11 +3301,6 @@
               <FileName>app_hooks.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\main\src\app_hooks.c</FilePath>
-            </File>
-            <File>
-              <FileName>ble_service.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\main\src\ble_service.c</FilePath>
             </File>
             <File>
               <FileName>ble_queue.c</FileName>

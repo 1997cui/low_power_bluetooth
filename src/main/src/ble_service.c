@@ -13,7 +13,7 @@ void ble_service_task(void * p)
 		
 		if (content != NULL)
 		{
-			if (content->content[2])
+			if (content[2])
 			{
 				GPIO_SetActive(GPIO_LED_PORT, GPIO_LED_PIN);
 			}
