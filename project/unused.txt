@@ -1,4 +1,4 @@
-;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Mon May 16 21:25:01 2016
+;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Tue May 17 19:46:43 2016
 ;VERSION 0.2
 ;FILE adc.o
 adc_calibrate <= USED 0
@@ -164,6 +164,7 @@ OSFlagPost <= USED 0
 OSFlagQuery <= USED 0
 ;FILE os_mbox.o
 OSMboxAccept <= USED 0
+OSMboxCreate <= USED 0
 OSMboxDel <= USED 0
 OSMboxPendAbort <= USED 0
 OSMboxPostOpt <= USED 0
@@ -197,7 +198,9 @@ OSTaskQuery <= USED 0
 OSTaskRegGet <= USED 0
 OSTaskRegGetID <= USED 0
 OSTaskRegSet <= USED 0
+OSTaskResume <= USED 0
 OSTaskStkChk <= USED 0
+OSTaskSuspend <= USED 0
 ;FILE os_time.o
 OSTimeDlyResume <= USED 0
 OSTimeGet <= USED 0

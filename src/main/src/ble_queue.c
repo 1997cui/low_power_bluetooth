@@ -2,21 +2,18 @@
 #include "arch_main.h"
 #include <string.h>
 
-static struct ble_content attempt = {{1, 2, 0}, 0, {0, 0, 1, 0}};
-
 void ble_queue_task(void *p)
 {
-	OS_EVENT *queue = (OS_EVENT *)p;
-	INT8U LED_NAME[31] = {1, 2, 0};
+	p = p;
 	
 	for (;;)
 	{
-		INT8U *message = (INT8U *)(&attempt);
-		struct ble_content led_message = *((struct ble_content *)OSMboxPend(ble_data_ptr, 100, &err));
+		uint8_t *content = (uint8_t)OSQPend(queue, 100, &err);
 		
-		if (!strcmp(led_message.name, LED_NAME))
+		if (content != NULL && content[1] == 'l')	//led_task
 		{
-			OSQPost(queue, message);
+			strncpy(led_message, content, content[0]);
+			OSQPost(led_q, (void *)led_message);
 			OSTimeDlyHMSM(0, 0, 1, 0);
 		}
 	}
