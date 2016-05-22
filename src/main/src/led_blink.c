@@ -5,7 +5,7 @@
 
 void led_blink_task(void * p)
 {
-	p = p;
+	OS_EVENT *led_q = p;
 	INT8U err;
 	
 	while (true)
