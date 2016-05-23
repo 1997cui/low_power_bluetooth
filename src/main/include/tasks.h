@@ -36,4 +36,13 @@ typedef struct sps_server_data_rx_ind ble_content;
 
 // ble data mailbox
 static OS_EVENT *ble_data_ptr;
+
+struct common_data
+{
+	OS_EVENT *ble_receive_q;
+	OS_EVENT *led_q;
+	OS_EVENT *ble_data_ptr;
+};
+static struct common_data _common_data;
+
 #endif

@@ -5,7 +5,7 @@
 
 void led_blink_task(void * p)
 {
-	OS_EVENT *led_q = p;
+	OS_EVENT *led_q = ((struct common_data *)p)->led_q;
 	INT8U err;
 	
 	while (true)
