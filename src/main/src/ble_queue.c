@@ -4,7 +4,8 @@
 
 void ble_queue_task(void *p)
 {
-	p = p;
+	OS_EVENT *led_q = ((struct common_data *)p)->led_q;
+	OS_EVENT *ble_receive_q = ((struct common_data *)p)->ble_receive_q;
 	INT8U err;
 	
 	for (;;)
