@@ -1,6 +1,9 @@
+
 #include "tasks.h"
 #include "arch_main.h"
 #include <string.h>
+
+static uint8_t led_message[MaxMessageLength];
 
 void ble_queue_task(void *p)
 {
@@ -10,13 +13,12 @@ void ble_queue_task(void *p)
 	
 	for (;;)
 	{
-		uint8_t *content = (uint8_t *)OSQPend(ble_receive_q, 100, &err);
+		uint8_t *content = (uint8_t *)OSQPend(ble_receive_q, 0, &err);
 		
-		if (content != NULL && content[1] == 'l')	//led_task
+		if (content != NULL && content[1] == 'l')
 		{
 			strncpy(led_message, content, content[0]);
 			OSQPost(led_q, (void *)led_message);
-			OSTimeDlyHMSM(0, 0, 1, 0);
 		}
 	}
 }

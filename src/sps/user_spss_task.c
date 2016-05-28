@@ -168,7 +168,7 @@ int user_sps_server_data_rx_ind_handler(ke_msg_id_t const msgid,
 	  
 	  
 		//bao li da fa hao
-	  OSMboxPost(ble_data_ptr, (void *)param);
+	OSMboxPost(_common_data.ble_data_ptr, (void *)param);
 	
     user_ble_push((uint8_t *)param->data, param->length);
 
