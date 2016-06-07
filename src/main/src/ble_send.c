@@ -12,11 +12,7 @@ void ble_send_task(void *p)
 	{
 		uint8_t *content = (uint8_t *)OSQPend(led_send_q, 0, &err);
 		
-		if (content != NULL)
-		{
-			ble_content _ble_content;										//这里是否需要改成静态变量
-			_ble_content.length = content[0] - 1;
-			strncpy(_ble_content.data, (const char *)(&content[1]), content[0] - 1);
-		}
+		if (err == OS_ERR_NONE && content != NULL)
+			user_send_ble_data(content + 1, *content - 1);
 	}
 }
