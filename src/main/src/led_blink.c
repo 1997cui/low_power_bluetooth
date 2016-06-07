@@ -4,10 +4,13 @@
 #include "tasks.h"
 #include "user_spss.h"
 
+static uint8_t led_send_message[MaxMessageLength];
+
 void led_blink_task(void * p)
 {
 	OS_EVENT *led_q = ((struct common_data *)p)->led_q;
-	INT8U err;
+	OS_EVENT *led_send_q = ((struct common_data *)p)->led_send_q;
+	INT8U err, cnt = 0;
 	
 	while (true)
 	{
@@ -16,7 +19,10 @@ void led_blink_task(void * p)
 		if (err == OS_ERR_NONE && content != NULL && content[2] == 'y')
 		{
 			GPIO_SetActive(GPIO_LED_PORT, GPIO_LED_PIN);
-			user_send_ble_data("Message recieved.\n", 19);
+			led_send_message[0] = 2;
+			led_send_message[1] = '0' + cnt % 10;
+			cnt++;
+			OSQPost(led_send_q, (void *)led_send_message);
 		}
 	}
 }
