@@ -129,7 +129,7 @@ void uart_sps_finish_transfers(void);
  * @param[in]      size   Size of the expected reception
  *****************************************************************************************
  */
-void uart_sps_read(uint8_t *bufptr, uint32_t size, void (*callback) (uint8_t, uint32_t));
+//void uart_sps_read(uint8_t *bufptr, uint32_t size, void (*callback) (uint8_t, uint32_t));
 
 /**
  ****************************************************************************************

@@ -510,7 +510,8 @@ void uart_sps_finish_transfers(void)
     while(!uart_thre_getf() || !uart_temt_getf());
 }
 
-void uart_sps_read(uint8_t *bufptr, uint32_t size, void (*callback) (uint8_t, uint32_t))
+//removed by ctyi
+/*void uart_sps_read(uint8_t *bufptr, uint32_t size, void (*callback) (uint8_t, uint32_t))
 {
     // Sanity check
     ASSERT_ERR(bufptr != NULL);
@@ -524,7 +525,7 @@ void uart_sps_read(uint8_t *bufptr, uint32_t size, void (*callback) (uint8_t, ui
 
     // Start data transaction
     uart_rec_data_avail_setf(1);
-}
+}*/
 
 void uart_sps_write(uint8_t *bufptr, uint32_t size, void (*callback) (uint8_t))
 {
