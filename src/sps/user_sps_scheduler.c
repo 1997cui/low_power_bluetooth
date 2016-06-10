@@ -95,14 +95,14 @@ void user_scheduler_init(void)
         user_buffer_create(&periph_to_ble_buffer, RX_BUFFER_ITEM_COUNT, RX_BUFFER_LWM, RX_BUFFER_HWM);
     }
     // register a callback function for the flow control
-    uart_sps_register_flow_ctrl_cb(&uart_flow_control_callback);
+    //uart_sps_register_flow_ctrl_cb(&uart_flow_control_callback);
 
-    uart_sps_init(UART_SPS_BAUDRATE, 3);
+    //uart_sps_init(UART_SPS_BAUDRATE, 3);
 
     // call read function once to initialize uart driver environment
     //uart_rx_callback(UART_STATUS_INIT, NULL);
 		
-    uart_sps_flow_on();
+    //uart_sps_flow_on();
 }
 
 /**
@@ -535,8 +535,8 @@ void user_sps_sleep_check(void)
                 break;
             if (user_rwip_sleep_check() != mode_sleeping)
                 break;
-            if (!uart_sps_flow_off(false))
-                break;
+            //if (!uart_sps_flow_off(false))
+                //break;
             user_sps_sleep_flow_off = true;
             arch_set_extended_sleep();
             return;
@@ -554,7 +554,8 @@ void user_sps_sleep_check(void)
  */
 void user_sps_sleep_restore(void)
 {
-    if (app_default_sleep_mode == ARCH_EXT_SLEEP_ON)
+	//removed by ctyi flow disabled
+    /*if (app_default_sleep_mode == ARCH_EXT_SLEEP_ON)
     {
         if (user_sps_sleep_flow_off)
         {
@@ -571,7 +572,7 @@ void user_sps_sleep_restore(void)
             
             user_sps_sleep_flow_off = false;
         }
-    }
+    }*/
 }
 
 #endif //(BLE_SPS_SERVER)||(BLE_SPS_CLIENT)

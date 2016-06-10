@@ -412,12 +412,12 @@ void uart_sps_init(uint8_t baudr, uint8_t mode )
     uart_sps_env.tx.size     = 0;
 
 #if (UART_HW_FLOW_ENABLED)
-    uart_sps_flow_off(false); 
+    //uart_sps_flow_off(false); 
 #endif //UART_HW_FLOW_ENABLED
 
 }
 
-void uart_sps_flow_on(void)
+/*void uart_sps_flow_on(void)
 {
 #if (UART_HW_FLOW_ENABLED)
     // Configure modem (HW flow control enable)
@@ -434,9 +434,9 @@ void uart_sps_flow_on(void)
         uart_sps_env.tx.flow_off_pending = false;
     }
 #endif //UART_SW_FLOW_ENABLED
-}
+}*/
 
-bool uart_sps_flow_off(bool force)
+/*bool uart_sps_flow_off(bool force)
 {
     bool flow_off = true;
 
@@ -491,7 +491,7 @@ bool uart_sps_flow_off(bool force)
     } while(false);
     
     return (flow_off);
-}
+}*/
 
 uint32_t uart_sps_get_tx_buffer_size(void)
 {
