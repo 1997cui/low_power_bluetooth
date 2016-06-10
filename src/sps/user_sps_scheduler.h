@@ -88,7 +88,8 @@ void user_ble_push(uint8_t* wrdata, uint16_t write_amount);
  * @brief Generate messages and provide to stream queue.
  ****************************************************************************************
 */
-void user_ble_pull (bool init, bool success);
+
+//void user_ble_pull (bool init, bool success);
 
 /**
  ****************************************************************************************

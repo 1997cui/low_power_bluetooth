@@ -178,7 +178,7 @@ void user_on_init(void)
 enum arch_main_loop_callback_ret user_on_system_powered(void)
 {
     user_sps_sleep_restore();
-    user_ble_pull(true, NULL);
+    //user_ble_pull(true, NULL);
 
     return GOTO_SLEEP;
 }

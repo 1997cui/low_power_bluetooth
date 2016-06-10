@@ -1,4 +1,4 @@
-;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Sun Jun 05 23:20:49 2016
+;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Fri Jun 10 11:32:02 2016
 ;VERSION 0.2
 ;FILE adc.o
 adc_calibrate <= USED 0
@@ -79,35 +79,22 @@ gapc_encrypt_req_ind_handler <= USED 0
 ;FILE app_task.o
 ;FILE arch_main.o
 app_asynch_proc <= USED 0
-app_asynch_sleep_proc <= USED 0
 app_asynch_trm <= USED 0
 app_sleep_entry_proc <= USED 0
 app_sleep_exit_proc <= USED 0
 app_sleep_prepare_proc <= USED 0
-arch_goto_sleep <= USED 0
-arch_resume_from_sleep <= USED 0
-arch_switch_clock_goto_sleep <= USED 0
-arch_turn_peripherals_off <= USED 0
-ble_turn_radio_off <= USED 0
-ble_validate_sleep_mode <= USED 0
-otp_prepare <= USED 0
-rwip_power_down <= USED 0
 ;FILE arch_patch.o
 ;FILE arch_sleep.o
-arch_ble_ext_wakeup_get <= USED 0
 arch_ble_ext_wakeup_off <= USED 0
 arch_ble_ext_wakeup_on <= USED 0
 arch_ble_force_wakeup <= USED 0
 arch_force_active_mode <= USED 0
-arch_get_sleep_mode <= USED 0
 arch_last_rwble_evt_get <= USED 0
 arch_restore_sleep_mode <= USED 0
 ;FILE arch_system.o
-app_use_lower_clocks_check <= USED 0
 arch_adv_time_calculate <= USED 0
 arch_set_pxact_gpio <= USED 0
 calibrate_rcx20 <= USED 0
-check_sys_startup_period <= USED 0
 lld_sleep_lpcycles_2_us_rcx_func <= USED 0
 lld_sleep_us_2_lpcycles_rcx_func <= USED 0
 read_rcx_freq <= USED 0
@@ -122,6 +109,7 @@ batt_cal_cr2032 <= USED 0
 battery_get_lvl <= USED 0
 ;FILE ble_queue.o
 ;FILE ble_receive.o
+;FILE ble_send.o
 ;FILE boot_vectors.o
 ;FILE ch_map.obj
 ;FILE gapm_util.obj
@@ -222,7 +210,6 @@ rf_nfm_enable <= USED 0
 rf_nfm_is_enabled <= USED 0
 ;FILE rwble.o
 ;FILE rwip.o
-rwip_sleep <= USED 0
 ;FILE smpc.obj
 ;FILE smpc_task.obj
 ;FILE spi.o
@@ -275,18 +262,13 @@ uart2_init <= USED 0
 uart2_read <= USED 0
 uart2_write <= USED 0
 ;FILE uart_sps.o
-uart_sps_fifo_check <= USED 0
 uart_sps_finish_transfers <= USED 0
-uart_sps_get_tx_buffer_size <= USED 0
 ;FILE user_buffer.o
 user_buffer_read_items <= USED 0
 ;FILE user_periph_setup.o
 ;FILE user_sps_device.o
-user_before_sleep <= USED 0
 user_on_system_powered <= USED 0
 ;FILE user_sps_scheduler.o
-user_rwip_sleep_check <= USED 0
-user_sps_sleep_check <= USED 0
 user_sps_sleep_restore <= USED 0
 ;FILE user_spss.o
 ;FILE user_spss_task.o

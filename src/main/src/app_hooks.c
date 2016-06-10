@@ -57,7 +57,7 @@ void  App_TaskDelHook (OS_TCB *ptcb)
 void  App_TaskIdleHook (void)
 {
 	schedule_while_ble_on();
-    user_ble_pull(true, NULL);
+    //user_ble_pull(true, NULL);
 
 
 #if OS_CRITICAL_METHOD == 3u

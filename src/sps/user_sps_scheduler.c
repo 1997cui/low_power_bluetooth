@@ -299,7 +299,10 @@ void user_ble_push(uint8_t* wrdata, uint16_t write_amount)
  * @return      none
  ****************************************************************************************
  */
-void user_ble_pull (bool init, bool success)
+
+
+//comment by ctyi. This function is not useful
+/*void user_ble_pull (bool init, bool success)
 {
     bool send_flow_on = false;
     static bool tx_busy_flag = false;
@@ -352,7 +355,7 @@ void user_ble_pull (bool init, bool success)
     {
         uart_sps_flow_on();
     }
-}
+}*/
 
 /**
  ****************************************************************************************

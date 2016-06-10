@@ -117,7 +117,7 @@ int user_sps_server_enable_cfm_handler(ke_msg_id_t const msgid,
                                       ke_task_id_t const dest_id,
                                       ke_task_id_t const src_id)
 {
-    user_ble_pull(false, false);
+    //user_ble_pull(false, false);
     arch_printf("Profile Enabled\r\n");
 
     return (KE_MSG_CONSUMED);
@@ -140,10 +140,10 @@ int user_sps_server_data_tx_cfm_handler(ke_msg_id_t const msgid,
                                       ke_task_id_t const dest_id,
                                       ke_task_id_t const src_id)
 {
-    if(param->status == GATT_ERR_NO_ERROR)
-        user_ble_pull(false, true);
-    else
-        user_ble_pull(false, false);
+    //if(param->status == GATT_ERR_NO_ERROR)
+        //user_ble_pull(false, true);
+    //else
+        //user_ble_pull(false, false);
     
     return (KE_MSG_CONSUMED);
 }
