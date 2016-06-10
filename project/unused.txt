@@ -1,4 +1,4 @@
-;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Fri Jun 10 11:32:02 2016
+;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Fri Jun 10 14:18:04 2016
 ;VERSION 0.2
 ;FILE adc.o
 adc_calibrate <= USED 0
@@ -263,8 +263,11 @@ uart2_read <= USED 0
 uart2_write <= USED 0
 ;FILE uart_sps.o
 uart_sps_finish_transfers <= USED 0
+uart_sps_read <= USED 0
 ;FILE user_buffer.o
+user_buffer_cfm_write <= USED 0
 user_buffer_read_items <= USED 0
+user_buffer_write_check <= USED 0
 ;FILE user_periph_setup.o
 ;FILE user_sps_device.o
 user_on_system_powered <= USED 0

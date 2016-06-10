@@ -67,13 +67,13 @@ bool user_sps_sleep_flow_off __attribute__((section("retention_mem_area0"),zero_
  ****************************************************************************************
  */
 /// Private callback functions prototypes
-static void uart_rx_callback(uint8_t res, uint32_t read_size);
+//static void uart_rx_callback(uint8_t res, uint32_t read_size);
 static void uart_tx_callback(uint8_t res);
 static void uart_flow_control_callback(bool flow_en);
 
 /// Private application functions prototypes
 static uint16_t user_periph_pull(uint8_t** rddata, uint16_t read_amount);
-static void user_periph_push(uint8_t** wrdata, uint16_t write_amount);
+//static void user_periph_push(uint8_t** wrdata, uint16_t write_amount);
 
 static void user_override_ble_xoff(void);
 static void user_override_ble_xon(void);
@@ -100,7 +100,7 @@ void user_scheduler_init(void)
     uart_sps_init(UART_SPS_BAUDRATE, 3);
 
     // call read function once to initialize uart driver environment
-    uart_rx_callback(UART_STATUS_INIT, NULL);
+    //uart_rx_callback(UART_STATUS_INIT, NULL);
 		
     uart_sps_flow_on();
 }
@@ -115,7 +115,9 @@ void user_scheduler_init(void)
  * @return      none
  ****************************************************************************************
  */
-static void uart_rx_callback(uint8_t res, uint32_t read_size)
+
+//removed by ctyi
+/*static void uart_rx_callback(uint8_t res, uint32_t read_size)
 {
     uint8_t *periph_rx_ptr = NULL;
     //function called from uart receive isr
@@ -137,7 +139,7 @@ static void uart_rx_callback(uint8_t res, uint32_t read_size)
     
     //reinitiate callback
     uart_sps_read(periph_rx_ptr, RX_CALLBACK_SIZE, &uart_rx_callback);
-}
+}*/
 
 /**
  ****************************************************************************************
@@ -234,7 +236,7 @@ static uint16_t user_periph_pull(uint8_t** rddata, uint16_t read_amount)
  * @return      none
  ****************************************************************************************
  */
-static void user_periph_push(uint8_t** wrdata, uint16_t write_amount)
+/*static void user_periph_push(uint8_t** wrdata, uint16_t write_amount)
 {
     bool send_flow_off = false;
 
@@ -254,7 +256,7 @@ static void user_periph_push(uint8_t** wrdata, uint16_t write_amount)
     {
         uart_sps_flow_off(true);
     }
-}
+}  */
 
 /**
  ****************************************************************************************
@@ -406,7 +408,7 @@ void user_scheduler_reinit(void)
     {
         uart_sps_init(UART_SPS_BAUDRATE, 3);
 
-        uart_rx_callback(UART_STATUS_INIT, NULL);
+        //uart_rx_callback(UART_STATUS_INIT, NULL);
     }
 }
 
