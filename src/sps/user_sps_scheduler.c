@@ -406,7 +406,7 @@ void user_scheduler_reinit(void)
     // call read function once to initialize uart driver environment
     if(user_buffer_initialized(&periph_to_ble_buffer))
     {
-        uart_sps_init(UART_SPS_BAUDRATE, 3);
+        //uart_sps_init(UART_SPS_BAUDRATE, 3);
 
         //uart_rx_callback(UART_STATUS_INIT, NULL);
     }

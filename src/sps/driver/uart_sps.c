@@ -351,7 +351,7 @@ bool uart_sps_is_rx_fifo_empty(void)
  ****************************************************************************************
  */
 
-void uart_sps_init(uint8_t baudr, uint8_t mode )
+/*void uart_sps_init(uint8_t baudr, uint8_t mode )
 {
     //Enable UART clock 
     SetBits16(CLK_PER_REG, UART1_ENABLE, 1);
@@ -361,7 +361,7 @@ void uart_sps_init(uint8_t baudr, uint8_t mode )
 
     // XMIT FIFO RESET, RCVR FIFO RESET, FIFO ENABLED,
     SetWord16(UART_IIR_FCR_REG,0x87); //rcv int when rx fifo 1/2 full
-    //SetWord16(UART_IIR_FCR_REG,0xC7); //rcv int when rx fifo 14/16 full   /* this option will cause the sps application to overflow the Rx FIFO */
+    //SetWord16(UART_IIR_FCR_REG,0xC7); //rcv int when rx fifo 14/16 full    this option will cause the sps application to overflow the Rx FIFO 
 
     //DISABLE INTERRUPTS, REGISTER IER IF UART_LCR_REG.DLAB=0
     SetWord16(UART_IER_DLH_REG, 0);
@@ -415,7 +415,7 @@ void uart_sps_init(uint8_t baudr, uint8_t mode )
     //uart_sps_flow_off(false); 
 #endif //UART_HW_FLOW_ENABLED
 
-}
+} */
 
 /*void uart_sps_flow_on(void)
 {
