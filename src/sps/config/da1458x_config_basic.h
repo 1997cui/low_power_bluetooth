@@ -80,5 +80,6 @@
 #endif
 
 #define USE_AES 1
+#define USE_AES_DECRYPT 1
 
 #endif // _DA1458X_CONFIG_BASIC_H_

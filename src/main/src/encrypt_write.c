@@ -6,6 +6,10 @@
 #include "user_spss.h"
 #include "aes.h"
 
+uint8_t key[16] = {0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01};//{0x06,0xa9,0x21,0x40,0x36,0xb8,0xa1,0x5b,0x51,0x2e,0x03,0xd5,0x34,0x12,0x00,0x06};
+uint8_t temp[MaxMessageLength - 2];
+uint8_t result[MaxMessageLength - 2];
+
 void encrypt_write_task(void * p)
 {
 	OS_EVENT *encrypt_write_q = ((struct common_data *)p)->encrypt_write_q;
@@ -16,14 +20,10 @@ void encrypt_write_task(void * p)
 		uint8_t *content = (uint8_t *)OSQPend(encrypt_write_q, 0, &err);
 		
 		//≤‚ ‘
-		uint8_t key[16]={ 
-  0x06,0xa9,0x21,0x40,0x36,0xb8,0xa1,0x5b,0x51,0x2e,0x03,0xd5,0x34,0x12,0x00,0x06};
-		uint8_t temp[16];
-		uint8_t result[16];
-		
-		aes_operation(key, sizeof(key), content, sizeof(content), temp, sizeof(temp), 1, NULL, 0);
+		int length = content[0] > 66 ? 64 : content[0] - 2;
+		aes_operation(key, 16, content + 2, length, temp, length, 1, NULL, 0);
 		rwip_schedule();
-		aes_operation(key, sizeof(key), temp, 16, result, 16, 0, NULL, 0);
+		aes_operation(key, 16, temp, length, result, length, 0, NULL, 0);
 		rwip_schedule();
 		user_send_ble_data(result, 16);
 		//≤‚ ‘Ω· ¯

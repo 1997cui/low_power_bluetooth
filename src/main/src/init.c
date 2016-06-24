@@ -15,10 +15,10 @@ OS_STK ble_queue_stack[MaxStkSize];
 
 OS_STK ble_send_stack[MaxStkSize];
 
-OS_STK encrypt_write_stack[MaxStkSize];
+OS_STK encrypt_write_stack[128];
 void *encrypt_write_queue[QUEUE_SIZE];
 
-OS_STK encrypt_read_stack[MaxStkSize];
+OS_STK encrypt_read_stack[128];
 void *encrypt_read_queue[QUEUE_SIZE];
 
 void init_task(void * p)
