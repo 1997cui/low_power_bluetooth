@@ -13,6 +13,7 @@ void encrypt_write_task(void * p)
 	{
 		uint8_t *content = (uint8_t *)OSQPend(encrypt_write_q, 0, &err);
 		
+		aa
 		//写入flash，假定content[2]开始是待加密的数据，content每位一个字节
 	}
 }

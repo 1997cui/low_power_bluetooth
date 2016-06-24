@@ -1035,6 +1035,16 @@
               <FileType>1</FileType>
               <FilePath>..\src\main\src\ble_send.c</FilePath>
             </File>
+            <File>
+              <FileName>encrypt_write.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\main\src\encrypt_write.c</FilePath>
+            </File>
+            <File>
+              <FileName>encrypt_read.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\main\src\encrypt_read.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2245,6 +2255,16 @@
               <FileType>1</FileType>
               <FilePath>..\src\main\src\ble_send.c</FilePath>
             </File>
+            <File>
+              <FileName>encrypt_write.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\main\src\encrypt_write.c</FilePath>
+            </File>
+            <File>
+              <FileName>encrypt_read.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\main\src\encrypt_read.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -3326,6 +3346,16 @@
               <FileName>ble_send.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\main\src\ble_send.c</FilePath>
+            </File>
+            <File>
+              <FileName>encrypt_write.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\main\src\encrypt_write.c</FilePath>
+            </File>
+            <File>
+              <FileName>encrypt_read.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\main\src\encrypt_read.c</FilePath>
             </File>
           </Files>
         </Group>
