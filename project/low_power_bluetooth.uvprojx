@@ -1036,9 +1036,14 @@
               <FilePath>..\src\main\src\ble_send.c</FilePath>
             </File>
             <File>
-              <FileName>flash_task.c</FileName>
+              <FileName>encrypt_read.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\src\main\src\flash_task.c</FilePath>
+              <FilePath>..\src\main\src\encrypt_read.c</FilePath>
+            </File>
+            <File>
+              <FileName>encrypt_write.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\main\src\encrypt_write.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2251,9 +2256,14 @@
               <FilePath>..\src\main\src\ble_send.c</FilePath>
             </File>
             <File>
-              <FileName>flash_task.c</FileName>
+              <FileName>encrypt_read.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\src\main\src\flash_task.c</FilePath>
+              <FilePath>..\src\main\src\encrypt_read.c</FilePath>
+            </File>
+            <File>
+              <FileName>encrypt_write.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\main\src\encrypt_write.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -3338,9 +3348,14 @@
               <FilePath>..\src\main\src\ble_send.c</FilePath>
             </File>
             <File>
-              <FileName>flash_task.c</FileName>
+              <FileName>encrypt_read.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\src\main\src\flash_task.c</FilePath>
+              <FilePath>..\src\main\src\encrypt_read.c</FilePath>
+            </File>
+            <File>
+              <FileName>encrypt_write.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\main\src\encrypt_write.c</FilePath>
             </File>
           </Files>
         </Group>

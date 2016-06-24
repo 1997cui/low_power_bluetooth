@@ -10,7 +10,8 @@ void encrypt_write_task(void * p)
 	INT8U err;
 	INT8U buffer_rd[4];
 	INT32U start_addr;
-	spi_flash_read_data(buffer_rd, 0x00, 2);
+	INT32U data_addr;
+	/*spi_flash_read_data(buffer_rd, 0x00, 2);
 	if ((buffer_rd[0] == (INT8U)0x70) && (buffer_rd[1] == (INT8U)0x50)) 
 	{
 		spi_flash_read_data(buffer_rd, 6, 2);
@@ -19,11 +20,16 @@ void encrypt_write_task(void * p)
 	{
 			start_addr = 16;
 	}
+	*/
+	start_addr = 0x10000;
 	
 	while (true)
 	{
 		uint8_t *content = (uint8_t *)OSQPend(encrypt_write_q, 0, &err);
-		//Ğ´Èëflash£¬¼Ù¶¨content[2]¿ªÊ¼ÊÇ´ı¼ÓÃÜµÄÊı¾İ£¬contentÃ¿Î»Ò»¸ö×Ö½
-		
+		//Ğ´Èëflash£¬¼Ù¶¨content[2]¿ªÊ¼ÊÇ´ı¼ÓÃÜµÄÊı¾İ£¬contentÃ¿Î»Ò»¸ö×Ö½  
+		//¼ÙÉècontent[2]ÊÇËùÒªĞ´ÈëµÄsectorºÅ£¬´Ó0¿ªÊ¼µ½15ºÅ½áÊø
+		data_addr = start_addr + 0x1000 * content[2];
+		spi_flash_block_erase(data_addr, SECTOR_ERASE);
+		spi_flash_write_data(&content[3], data_addr, content[0] - 3);
 	}
 }

@@ -1,4 +1,4 @@
-;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Fri Jun 24 19:22:32 2016
+;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Fri Jun 24 20:06:36 2016
 ;VERSION 0.2
 ;FILE adc.o
 adc_calibrate <= USED 0
@@ -221,19 +221,15 @@ rf_nfm_is_enabled <= USED 0
 spi_disable <= USED 0
 spi_release <= USED 0
 ;FILE spi_flash.o
-spi_flash_block_erase <= USED 0
 spi_flash_chip_erase <= USED 0
 spi_flash_chip_erase_forced <= USED 0
 spi_flash_configure_memory_protection <= USED 0
 spi_flash_enable <= USED 0
 spi_flash_fill <= USED 0
 spi_flash_page_fill <= USED 0
-spi_flash_page_program <= USED 0
 spi_flash_power_down <= USED 0
 spi_flash_release_from_power_down <= USED 0
 spi_flash_set_write_disable <= USED 0
-spi_flash_set_write_enable <= USED 0
-spi_flash_write_data <= USED 0
 spi_flash_write_enable_volatile <= USED 0
 spi_flash_write_status_reg <= USED 0
 spi_read_flash_memory_man_and_dev_id <= USED 0
