@@ -17,10 +17,5 @@ void ble_send_task(void *p)
 		{
 			user_send_ble_data(content + 1, *content - 1);
 		}
-		
-		if ((content = (uint8_t *)OSQPend(encrypt_read_q, 0, &err)) != NULL && err == OS_ERR_NONE)
-		{
-			user_send_ble_data(content + 1, *content - 1);
-		}
 	}
 }

@@ -4,6 +4,7 @@
 #include "tasks.h"
 #include "rwip.h"
 #include "user_spss.h"
+#include "aes.h"
 
 void encrypt_write_task(void * p)
 {

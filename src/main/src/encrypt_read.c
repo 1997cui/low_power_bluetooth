@@ -2,6 +2,7 @@
 #include "tasks.h"
 #include "arch_main.h"
 #include <string.h>
+#include "aes.h"
 
 static uint8_t encrypt_read_message[MaxMessageLength];
 

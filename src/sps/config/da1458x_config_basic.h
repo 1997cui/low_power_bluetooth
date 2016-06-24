@@ -79,4 +79,6 @@
     #define CFG_PRINTF_UART2
 #endif
 
+#define USE_AES 1
+
 #endif // _DA1458X_CONFIG_BASIC_H_
