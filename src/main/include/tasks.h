@@ -25,6 +25,12 @@ void ble_send_task(void *);
 #define LED_BLINK_TASK_PRIO 5
 void led_blink_task(void *);
 
+#define ENCRYPT_WRITE_TASK_PRIO 6
+void encrypt_write_task(void *);
+
+#define ENCRYPT_READ_TASK_PRIO 6
+void encrypt_read_task(void *);
+
 typedef struct sps_server_data_rx_ind ble_content;
 
 struct common_data
@@ -33,6 +39,8 @@ struct common_data
 	OS_EVENT *led_q;
 	OS_EVENT *ble_data_ptr;
 	OS_EVENT *led_send_q;
+	OS_EVENT *encrypt_write_q;
+	OS_EVENT *encrypt_read_q;
 };
 
 extern struct common_data _common_data;
