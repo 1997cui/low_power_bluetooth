@@ -1035,6 +1035,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\main\src\ble_send.c</FilePath>
             </File>
+            <File>
+              <FileName>flash_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\main\src\flash_task.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2245,6 +2250,11 @@
               <FileType>1</FileType>
               <FilePath>..\src\main\src\ble_send.c</FilePath>
             </File>
+            <File>
+              <FileName>flash_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\main\src\flash_task.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -3326,6 +3336,11 @@
               <FileName>ble_send.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\main\src\ble_send.c</FilePath>
+            </File>
+            <File>
+              <FileName>flash_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\main\src\flash_task.c</FilePath>
             </File>
           </Files>
         </Group>
