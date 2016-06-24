@@ -1,5 +1,6 @@
 
 #include "tasks.h"
+#include "aes.h"
 
 struct common_data _common_data;
 
@@ -40,6 +41,8 @@ void init_task(void * p)
 	OSTaskCreate(ble_send_task, &_common_data, &ble_send_stack[MaxStkSize - 1], BLE_SEND_TASK_PRIO);
 	OSTaskCreate(encrypt_write_task, &_common_data, &encrypt_write_stack[MaxStkSize - 1], ENCRYPT_WRITE_TASK_PRIO);
 	OSTaskCreate(encrypt_read_task, &_common_data, &encrypt_read_stack[MaxStkSize - 1], ENCRYPT_READ_TASK_PRIO);
+	
+	aes_init(false, NULL);
 	
 	OSTaskDel(OS_PRIO_SELF);
 }

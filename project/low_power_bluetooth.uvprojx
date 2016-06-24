@@ -555,6 +555,26 @@
               <FileType>1</FileType>
               <FilePath>.\..\src\sdk\ble_stack\host\gap\gapm\gapm.c</FilePath>
             </File>
+            <File>
+              <FileName>aes.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\sdk\platform\core_modules\crypto\aes.c</FilePath>
+            </File>
+            <File>
+              <FileName>aes_api.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\sdk\platform\core_modules\crypto\aes_api.c</FilePath>
+            </File>
+            <File>
+              <FileName>aes_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\sdk\platform\core_modules\crypto\aes_task.c</FilePath>
+            </File>
+            <File>
+              <FileName>sw_aes.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\sdk\platform\core_modules\crypto\sw_aes.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -1036,14 +1056,14 @@
               <FilePath>..\src\main\src\ble_send.c</FilePath>
             </File>
             <File>
-              <FileName>encrypt_read.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\main\src\encrypt_read.c</FilePath>
-            </File>
-            <File>
               <FileName>encrypt_write.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\main\src\encrypt_write.c</FilePath>
+            </File>
+            <File>
+              <FileName>encrypt_read.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\main\src\encrypt_read.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1775,6 +1795,26 @@
               <FileType>1</FileType>
               <FilePath>.\..\src\sdk\ble_stack\host\gap\gapm\gapm.c</FilePath>
             </File>
+            <File>
+              <FileName>aes.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\sdk\platform\core_modules\crypto\aes.c</FilePath>
+            </File>
+            <File>
+              <FileName>aes_api.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\sdk\platform\core_modules\crypto\aes_api.c</FilePath>
+            </File>
+            <File>
+              <FileName>aes_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\sdk\platform\core_modules\crypto\aes_task.c</FilePath>
+            </File>
+            <File>
+              <FileName>sw_aes.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\sdk\platform\core_modules\crypto\sw_aes.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -2256,14 +2296,14 @@
               <FilePath>..\src\main\src\ble_send.c</FilePath>
             </File>
             <File>
-              <FileName>encrypt_read.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\main\src\encrypt_read.c</FilePath>
-            </File>
-            <File>
               <FileName>encrypt_write.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\main\src\encrypt_write.c</FilePath>
+            </File>
+            <File>
+              <FileName>encrypt_read.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\main\src\encrypt_read.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2867,6 +2907,26 @@
               <FileType>1</FileType>
               <FilePath>.\..\src\sdk\ble_stack\host\gap\gapm\gapm.c</FilePath>
             </File>
+            <File>
+              <FileName>aes.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\sdk\platform\core_modules\crypto\aes.c</FilePath>
+            </File>
+            <File>
+              <FileName>aes_api.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\sdk\platform\core_modules\crypto\aes_api.c</FilePath>
+            </File>
+            <File>
+              <FileName>aes_task.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\sdk\platform\core_modules\crypto\aes_task.c</FilePath>
+            </File>
+            <File>
+              <FileName>sw_aes.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\sdk\platform\core_modules\crypto\sw_aes.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -3348,14 +3408,14 @@
               <FilePath>..\src\main\src\ble_send.c</FilePath>
             </File>
             <File>
-              <FileName>encrypt_read.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\main\src\encrypt_read.c</FilePath>
-            </File>
-            <File>
               <FileName>encrypt_write.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\main\src\encrypt_write.c</FilePath>
+            </File>
+            <File>
+              <FileName>encrypt_read.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\main\src\encrypt_read.c</FilePath>
             </File>
           </Files>
         </Group>
