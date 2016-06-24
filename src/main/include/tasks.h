@@ -6,8 +6,9 @@
 #include "sps_server_task.h"
 
 #define MaxStkSize 64
-#define MaxMessageLength 32
-#define QUEUE_SIZE 32
+#define MaxMessageLength 34
+#define QUEUE_SIZE 16
+
 
 
 #define INIT_TASK_PRIO 1
@@ -28,7 +29,7 @@ void led_blink_task(void *);
 #define ENCRYPT_WRITE_TASK_PRIO 6
 void encrypt_write_task(void *);
 
-#define ENCRYPT_READ_TASK_PRIO 6
+#define ENCRYPT_READ_TASK_PRIO 7
 void encrypt_read_task(void *);
 
 typedef struct sps_server_data_rx_ind ble_content;

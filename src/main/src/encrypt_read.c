@@ -3,6 +3,7 @@
 #include "arch_main.h"
 #include <string.h>
 #include "spi_flash.h"
+#include "aes.h"
 
 static uint8_t encrypt_read_message[MaxMessageLength];
 
