@@ -1,8 +1,10 @@
-;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Fri Jun 10 14:35:30 2016
+;#<FEEDBACK># ARM Linker, 5060061: Last Updated: Fri Jun 24 20:25:09 2016
 ;VERSION 0.2
 ;FILE adc.o
 adc_calibrate <= USED 0
 adc_disable <= USED 0
+;FILE aes.o
+;FILE aes_api.o
 ;FILE app.o
 active_conhdl_to_conidx <= USED 0
 active_conidx_to_conhdl <= USED 0
@@ -112,6 +114,8 @@ battery_get_lvl <= USED 0
 ;FILE ble_send.o
 ;FILE boot_vectors.o
 ;FILE ch_map.obj
+;FILE encrypt_read.o
+;FILE encrypt_write.o
 ;FILE gapm_util.obj
 ;FILE gpio.o
 GPIO_ConfigurePinPower <= USED 0
@@ -249,6 +253,11 @@ spi_read_flash_jedec_id <= USED 0
 spi_read_flash_memory_man_and_dev_id <= USED 0
 spi_read_flash_unique_id <= USED 0
 ;FILE sps_server.o
+;FILE sw_aes.o
+AES_cbc_decrypt <= USED 0
+AES_cbc_encrypt <= USED 0
+AES_decrypt <= USED 0
+AES_encrypt <= USED 0
 ;FILE syscntl.o
 syscntl_set_dcdc_vbat3v_level <= USED 0
 ;FILE system_armcm0.o

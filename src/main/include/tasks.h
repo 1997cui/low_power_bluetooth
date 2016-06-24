@@ -6,8 +6,8 @@
 #include "sps_server_task.h"
 
 #define MaxStkSize 64
-#define MaxMessageLength 128
-#define QUEUE_SIZE 64
+#define MaxMessageLength 32
+#define QUEUE_SIZE 32
 
 
 #define INIT_TASK_PRIO 1
