@@ -39,13 +39,13 @@ struct common_data
 	OS_EVENT *ble_receive_q;
 	OS_EVENT *led_q;
 	OS_EVENT *ble_data_ptr;
-	OS_EVENT *led_send_q;
+	OS_EVENT *ble_send_q;
 	OS_EVENT *encrypt_write_q;
-	OS_EVENT *encrypt_read_q;
 	OS_EVENT *encrypt_read_command_q;
 };
 
 extern struct common_data _common_data;
 extern void u_strncpy(uint8_t *dst, uint8_t *src, uint8_t length);
+extern uint8_t key[16];
 
 #endif

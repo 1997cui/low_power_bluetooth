@@ -5,22 +5,11 @@
 struct common_data _common_data;
 
 OS_STK ble_receive_stack[MaxStkSize];
-void *ble_receive_queue[QUEUE_SIZE];
-
 OS_STK led_blink_stack[MaxStkSize];
-void *led_queue[QUEUE_SIZE];
-void *led_send_queue[QUEUE_SIZE];
-
 OS_STK ble_queue_stack[MaxStkSize];
-
 OS_STK ble_send_stack[MaxStkSize];
-
 OS_STK encrypt_write_stack[128];
-void *encrypt_write_queue[QUEUE_SIZE];
-
 OS_STK encrypt_read_stack[128];
-void *encrypt_read_queue[QUEUE_SIZE];
-void *encrypt_read_command_queue[QUEUE_SIZE];
 
 void init_task(void * p)
 {
@@ -30,13 +19,12 @@ void init_task(void * p)
 	
 	OS_CPU_SysTickInit(1000);
 	
-	_common_data.led_q = OSQCreate(led_queue, QUEUE_SIZE);
-	_common_data.ble_receive_q = OSQCreate(ble_receive_queue, QUEUE_SIZE);
+	_common_data.led_q = OSMboxCreate(NULL);
+	_common_data.ble_receive_q = OSMboxCreate(NULL);
 	_common_data.ble_data_ptr = OSMboxCreate(NULL);
-	_common_data.led_send_q = OSQCreate(led_send_queue, QUEUE_SIZE);
-	_common_data.encrypt_write_q = OSQCreate(encrypt_write_queue, QUEUE_SIZE);
-	_common_data.encrypt_read_q = OSQCreate(encrypt_read_queue, QUEUE_SIZE);
-	_common_data.encrypt_read_command_q = OSQCreate(encrypt_read_command_queue, QUEUE_SIZE);
+	_common_data.ble_send_q = OSMboxCreate(NULL);
+	_common_data.encrypt_write_q = OSMboxCreate(NULL);
+	_common_data.encrypt_read_command_q = OSMboxCreate(NULL);
 	OSTaskCreate(led_blink_task, &_common_data, &led_blink_stack[MaxStkSize - 1], LED_BLINK_TASK_PRIO);
 	OSTaskCreate(ble_queue_task, &_common_data, &ble_queue_stack[MaxStkSize - 1], BLE_QUEUE_TASK_PRIO);
 	OSTaskCreate(ble_receive_task, &_common_data, &ble_receive_stack[MaxStkSize - 1], BLE_RECEIVE_TASK_PRIO);

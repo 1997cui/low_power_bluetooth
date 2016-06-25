@@ -103,9 +103,12 @@ int aes_enc_dec(unsigned char *in, unsigned char *out, AES_KEY *key, int enc_dec
         }
         AES_decrypt(key, (uint32_t *)in);
         //decrypt is performed in place, so copy to out afterwards
+        //for(j=0;j<16;j+=4) {
+        //    for (int k=3;k>=0;k--)
+        //        out[j+k] = in[j+3-k];
+        //}
         for(j=0;j<16;j+=4) {
-            for (int k=3;k>=0;k--)
-                out[j+k] = in[j+3-k];
+            *(uint32_t *)&out[12-j] = *(uint32_t *)&in[j];
         }
 #else
         return -6;

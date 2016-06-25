@@ -28,7 +28,7 @@ void ble_receive_task(void *p)
 				if (sum_length >= temp_message[0])
 				{
 					sum_length = 0;
-					OSQPost(ble_receive_q, (void *)temp_message);
+					OSMboxPost(ble_receive_q, (void *)temp_message);
 				}
 			}
 		} while (sum_length);

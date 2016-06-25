@@ -2,9 +2,7 @@
 #include "tasks.h"
 #include "arch_main.h"
 
-static uint8_t led_message[MaxMessageLength];
-static uint8_t encrypt_write_message[MaxMessageLength];
-static uint8_t encrypt_read_command_message[MaxMessageLength];
+static uint8_t message[MaxMessageLength];
 
 void ble_queue_task(void *p)
 {
@@ -16,22 +14,15 @@ void ble_queue_task(void *p)
 	
 	for (;;)
 	{
-		uint8_t *content = (uint8_t *)OSQPend(ble_receive_q, 0, &err);
+		uint8_t *content = (uint8_t *)OSMboxPend(ble_receive_q, 0, &err);
+		if (!content || err) continue;
 		
-		if (content != NULL && content[1] == 'l')
+		u_strncpy(message, content, content[0]);
+		switch (content[1])
 		{
-			u_strncpy(led_message, content, content[0]);
-			OSQPost(led_q, (void *)led_message);
-		}
-		else if (content != NULL && content[1] == 0x08)
-		{
-			u_strncpy(encrypt_write_message, content, content[0]);
-			OSQPost(encrypt_write_q, (void *)encrypt_write_message);
-		}
-		else if (content != NULL && content[1] == 0x09)
-		{
-			u_strncpy(encrypt_read_command_message, content, content[0]);
-			OSQPost(encrypt_read_command_q, (void *)encrypt_read_command_message);
+			case 'l':  OSMboxPost(led_q,                  (void *)message); break;
+			case 0x08: OSMboxPost(encrypt_write_q,        (void *)message); break;
+			case 0x09: OSMboxPost(encrypt_read_command_q, (void *)message); break;
 		}
 	}
 }
