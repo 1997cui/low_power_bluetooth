@@ -46,5 +46,6 @@ struct common_data
 };
 
 extern struct common_data _common_data;
+extern void u_strncpy(uint8_t *dst, uint8_t *src, uint8_t length);
 
 #endif
