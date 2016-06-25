@@ -24,7 +24,7 @@ void encrypt_read_task(void *p)
 			
 		data_addr = start_addr + 0x1000 * content[2];
 		spi_flash_read_data(encrypt + 3, data_addr, MaxMessageLength-2);
-		aes_operation(key, 16, encrypt + 4, encrypt[0] - 1, decrypt + 4, encrypt[0] - 1, 0, NULL, 0);
+		aes_operation(key, 16, encrypt + 4, ((encrypt[0]-1-1)/16+1)*16, decrypt + 4, encrypt[0] - 1, 0, NULL, 0);
 		rwip_schedule();
 		decrypt[3] = encrypt[3];
 		u_strncpy(encrypt_read_message, decrypt + 3, decrypt[3]);

@@ -41,15 +41,15 @@ void encrypt_write_task(void * p)
 		{
 			message[0] = content[0] - 2;
 			u_strncpy(message + 1, content + 3, content[0] - 3);
-			aes_operation(key, 16, message + 1, message[0] - 1, encrypted + 1, message[0] - 1, 1, NULL, 0);
+			aes_operation(key, 16, message + 1, message[0] - 1, encrypted + 1, ((message[0]-1-1)/16+1)*16, 1, NULL, 0);
 			rwip_schedule();
 			encrypted[0] = message[0];
 			data_addr = start_addr + 0x1000 * content[2];
 			err = spi_flash_block_erase(data_addr, SECTOR_ERASE);
 			if (err != ERR_OK) __asm("BKPT #0\n");
 			//spi_flash_write_data(&content[3], data_addr, content[0] - 3);
-			write_byte = spi_flash_write_data(encrypted, data_addr, encrypted[0]);
-			if (write_byte != message[0]) __asm("BKPT #0\n");
+			write_byte = spi_flash_write_data(encrypted, data_addr, ((message[0]-1-1)/16+1)*16+1);
+			if (write_byte != (1+((message[0]-1-1)/16+1)*16)) __asm("BKPT #0\n");
 		}
 		
 		//写入flash，假定content[2]开始是待加密的数据，content每位一个字 
