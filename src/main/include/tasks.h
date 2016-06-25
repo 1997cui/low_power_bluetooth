@@ -6,8 +6,9 @@
 #include "sps_server_task.h"
 
 #define MaxStkSize 64
-#define MaxMessageLength 128
-#define QUEUE_SIZE 64
+#define MaxMessageLength 34
+#define QUEUE_SIZE 16
+
 
 
 #define INIT_TASK_PRIO 1
@@ -28,7 +29,7 @@ void led_blink_task(void *);
 #define ENCRYPT_WRITE_TASK_PRIO 6
 void encrypt_write_task(void *);
 
-#define ENCRYPT_READ_TASK_PRIO 6
+#define ENCRYPT_READ_TASK_PRIO 7
 void encrypt_read_task(void *);
 
 typedef struct sps_server_data_rx_ind ble_content;
@@ -38,11 +39,13 @@ struct common_data
 	OS_EVENT *ble_receive_q;
 	OS_EVENT *led_q;
 	OS_EVENT *ble_data_ptr;
-	OS_EVENT *led_send_q;
+	OS_EVENT *ble_send_q;
 	OS_EVENT *encrypt_write_q;
-	OS_EVENT *encrypt_read_q;
+	OS_EVENT *encrypt_read_command_q;
 };
 
 extern struct common_data _common_data;
+extern void u_strncpy(uint8_t *dst, uint8_t *src, uint8_t length);
+extern uint8_t key[16];
 
 #endif

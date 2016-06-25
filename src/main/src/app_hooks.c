@@ -59,7 +59,7 @@ void  App_TaskIdleHook (void)
 	schedule_while_ble_on();
     //user_ble_pull(true, NULL);
 
-
+/*
 #if OS_CRITICAL_METHOD == 3u
     OS_CPU_SR  cpu_sr = 0u;
 #endif
@@ -89,7 +89,7 @@ void  App_TaskIdleHook (void)
 			WFI();
 	}
 	
-	OS_EXIT_CRITICAL();
+	OS_EXIT_CRITICAL();*/
 }
 #endif
 
