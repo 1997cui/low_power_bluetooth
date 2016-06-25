@@ -1,7 +1,6 @@
 
 #include "tasks.h"
 #include "arch_main.h"
-#include <string.h>
 
 void ble_send_task(void *p)
 {

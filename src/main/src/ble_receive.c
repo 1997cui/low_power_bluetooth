@@ -1,7 +1,6 @@
 
 #include "tasks.h"
 #include "arch_main.h"
-#include <string.h>
 
 static uint8_t temp_message[MaxMessageLength];
 
@@ -23,7 +22,7 @@ void ble_receive_task(void *p)
 				continue;
 			if (message_ptr->length)
 			{
-				strncpy(&temp_message[sum_length], message_ptr->data, message_ptr->length);
+				u_strncpy(&temp_message[sum_length], message_ptr->data, message_ptr->length);
 				sum_length += message_ptr->length;
 				
 				if (sum_length >= temp_message[0])
