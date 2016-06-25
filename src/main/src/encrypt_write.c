@@ -42,7 +42,7 @@ void encrypt_write_task(void * p)
 			aes_operation(key, 16, message, message[0], temp, message[0], 1, NULL, 0);
 			data_addr = start_addr + 0x1000 * content[2];
 			spi_flash_block_erase(data_addr, SECTOR_ERASE);
-			spi_flash_write_data(temp, data_addr, content[0] - 3);
+			spi_flash_write_data(&content[3], data_addr, content[0] - 3);
 		}
 		
 		//写入flash，假定content[2]开始是待加密的数据，content每位一个字 
