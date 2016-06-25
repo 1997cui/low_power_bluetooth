@@ -33,8 +33,7 @@ static void spi_flash_peripheral_init()
 }
 
 void flash_init()
-{
-	unsigned int jedec_id;
+{unsigned int jedec_id;
 	spi_flash_peripheral_init();
 	spi_cs_low();
   spi_cs_high();

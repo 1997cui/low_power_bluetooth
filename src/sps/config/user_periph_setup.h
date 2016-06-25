@@ -74,6 +74,12 @@
 #define GPIO_LED_PORT     GPIO_PORT_1
 #define GPIO_LED_PIN      GPIO_PIN_0
 
+#define SPI_GPIO_PORT  GPIO_PORT_0 
+#define SPI_CLK_PIN    GPIO_PIN_0
+#define SPI_CS_PIN     GPIO_PIN_3
+#define SPI_DI_PIN     GPIO_PIN_5
+#define SPI_DO_PIN     GPIO_PIN_6
+
 /*
  * FUNCTION DECLARATIONS
  ****************************************************************************************

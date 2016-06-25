@@ -18,6 +18,7 @@ void encrypt_write_task(void * p)
 	INT8U buffer_rd[4];
 	INT32U start_addr;
 	INT32U data_addr;
+	INT32U write_byte;
 	/*spi_flash_read_data(buffer_rd, 0x00, 2);
 	if ((buffer_rd[0] == (INT8U)0x70) && (buffer_rd[1] == (INT8U)0x50)) 
 	{
@@ -28,7 +29,7 @@ void encrypt_write_task(void * p)
 			start_addr = 16;
 	}
 	*/
-	start_addr = 0x10000;
+	start_addr = 0x00000;
 	
 	while (true)
 	{
@@ -37,16 +38,18 @@ void encrypt_write_task(void * p)
 		//写入flash，假定content[2]开始是待加密的数据，content每位一个字 
 		//假设content[2]是所要写入的sector号，从0开始到15号结束
 		data_addr = start_addr + 0x1000 * content[2];
-		spi_flash_block_erase(data_addr, SECTOR_ERASE);
-		spi_flash_write_data(&content[3], data_addr, content[0] - 3);
-	
+		err = spi_flash_block_erase(data_addr, SECTOR_ERASE);
+		if (err != ERR_OK) __asm("BKPT #0\n");
+		write_byte = spi_flash_write_data(&content[3], data_addr, content[0] - 3);
+		if (write_byte != content[0] - 3) __asm("BKPT #0\n");
+		//user_send_ble_data();
 		//测试
-		int length = content[0] > 66 ? 64 : content[0] - 2;
+/*		int length = content[0] > 66 ? 64 : content[0] - 2;
 		aes_operation(key, 16, content + 2, length, temp, length, 1, NULL, 0);
 		rwip_schedule();
 		aes_operation(key, 16, temp, length, result, length, 0, NULL, 0);
 		rwip_schedule();
-		user_send_ble_data(result, 16);
+		user_send_ble_data(result, 16);*/
 		//测试结束
 		
 	}

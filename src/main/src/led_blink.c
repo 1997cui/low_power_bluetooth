@@ -16,7 +16,7 @@ void led_blink_task(void * p)
 	{
 		uint8_t *content = (uint8_t *)OSQPend(led_q, 0, &err);
 		
-		if (err == OS_ERR_NONE && content != NULL && content[2] == 'y')
+		if (err == OS_ERR_NONE && content != NULL && content[4] == 'y')
 		{
 			GPIO_SetActive(GPIO_LED_PORT, GPIO_LED_PIN);
 			led_send_message[0] = 2;
