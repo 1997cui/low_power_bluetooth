@@ -525,11 +525,6 @@
               <FileType>1</FileType>
               <FilePath>..\src\sdk\platform\driver\systick\systick.c</FilePath>
             </File>
-            <File>
-              <FileName>uart2.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\sdk\platform\driver\uart\uart2.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -1064,6 +1059,16 @@
               <FileName>encrypt_write.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\main\src\encrypt_write.c</FilePath>
+            </File>
+            <File>
+              <FileName>file.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\main\src\file.c</FilePath>
+            </File>
+            <File>
+              <FileName>util.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\main\src\util.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -1765,11 +1770,6 @@
               <FileType>1</FileType>
               <FilePath>..\src\sdk\platform\driver\systick\systick.c</FilePath>
             </File>
-            <File>
-              <FileName>uart2.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\sdk\platform\driver\uart\uart2.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -2304,6 +2304,16 @@
               <FileName>encrypt_write.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\main\src\encrypt_write.c</FilePath>
+            </File>
+            <File>
+              <FileName>file.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\main\src\file.c</FilePath>
+            </File>
+            <File>
+              <FileName>util.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\main\src\util.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -2877,11 +2887,6 @@
               <FileType>1</FileType>
               <FilePath>..\src\sdk\platform\driver\systick\systick.c</FilePath>
             </File>
-            <File>
-              <FileName>uart2.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\src\sdk\platform\driver\uart\uart2.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -3416,6 +3421,16 @@
               <FileName>encrypt_write.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\main\src\encrypt_write.c</FilePath>
+            </File>
+            <File>
+              <FileName>file.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\main\src\file.c</FilePath>
+            </File>
+            <File>
+              <FileName>util.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\main\src\util.c</FilePath>
             </File>
           </Files>
         </Group>

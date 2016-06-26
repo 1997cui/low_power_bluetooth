@@ -5,11 +5,15 @@
 #include "user_spss.h"
 #include "spi_flash.h"
 #include "aes.h"
+#include "util.h"
+
+#include "file.h"
 
 
 uint8_t key[16] = {0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01};//{0x06,0xa9,0x21,0x40,0x36,0xb8,0xa1,0x5b,0x51,0x2e,0x03,0xd5,0x34,0x12,0x00,0x06};
-uint8_t encrypted[MaxMessageLength - 2];
-uint8_t message[MaxMessageLength - 2];
+//uint8_t encrypted[MaxMessageLength - 2];
+//uint8_t message[MaxMessageLength - 2];
+static flash_file file;
 
 void encrypt_write_task(void * p)
 {
@@ -39,6 +43,7 @@ void encrypt_write_task(void * p)
 		
 		if (content != NULL)
 		{
+			/*
 			message[0] = content[0] - 2;
 			u_strncpy(message + 1, content + 3, content[0] - 3);
 			aes_operation(key, 16, message + 1, message[0] - 1, encrypted + 1, ((message[0]-1-1)/16+1)*16, 1, NULL, 0);
@@ -50,6 +55,12 @@ void encrypt_write_task(void * p)
 			//spi_flash_write_data(&content[3], data_addr, content[0] - 3);
 			write_byte = spi_flash_write_data(encrypted, data_addr, ((message[0]-1-1)/16+1)*16+1);
 			if (write_byte != (1+((message[0]-1-1)/16+1)*16)) __asm("BKPT #0\n");
+			*/
+			data_addr = start_addr + 0x1000 * content[2];
+			if (!file_open(data_addr, 'w', &file)) __asm("BKPT #0");
+			for (int i = 3; i < content[0]; ++i)
+				if (!file_putc(&file, content[i])) __asm("BKPT #0");
+			if (!file_close(&file)) __asm("BKPT #0");
 		}
 		
 		//写入flash，假定content[2]开始是待加密的数据，content每位一个字 

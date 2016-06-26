@@ -3,10 +3,15 @@
 #include "arch_main.h"
 #include "spi_flash.h"
 #include "aes.h"
+#include "util.h"
+
+#include "file.h"
 
 static uint8_t encrypt_read_message[MaxMessageLength];
-uint8_t encrypt[MaxMessageLength + 6];
-uint8_t decrypt[MaxMessageLength + 6];
+//uint8_t encrypt[MaxMessageLength + 6];
+//uint8_t decrypt[MaxMessageLength + 6];
+
+static flash_file file;
 
 void encrypt_read_task(void *p)
 {
@@ -21,13 +26,22 @@ void encrypt_read_task(void *p)
 	while (1)
 	{
 		uint8_t *content = (uint8_t *)OSMboxPend(encrypt_read_command_q, 0, &err);
-			
+		
+		if (!content || err) continue;
+		
 		data_addr = start_addr + 0x1000 * content[2];
+		/*
 		spi_flash_read_data(encrypt + 3, data_addr, MaxMessageLength-2);
 		aes_operation(key, 16, encrypt + 4, ((encrypt[0]-1-1)/16+1)*16, decrypt + 4, encrypt[0] - 1, 0, NULL, 0);
 		rwip_schedule();
 		decrypt[3] = encrypt[3];
 		u_strncpy(encrypt_read_message, decrypt + 3, decrypt[3]);
+		*/
+		if (!file_open(data_addr, 'r', &file)) __asm("BKPT #0");
+		encrypt_read_message[0] = content[3] + 1;
+		for (int i = 1; i <= content[3]; ++i)
+			if (!file_getc(&file, encrypt_read_message + i)) __asm("BKPT #0");
+		if (!file_close(&file)) __asm("BKPT #0");
 		OSMboxPost(ble_send_q, (void *)encrypt_read_message);
 	}
 	

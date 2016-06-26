@@ -1,6 +1,7 @@
 
 #include "tasks.h"
 #include "arch_main.h"
+#include "util.h"
 
 static uint8_t message[MaxMessageLength];
 
