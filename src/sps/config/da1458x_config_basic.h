@@ -38,7 +38,7 @@
 /* Enables WatchDog timer.                                                                                      */
 /****************************************************************************************************************/
 #undef CFG_WDOG
-
+//#define DEVELOPMENT_DEBUG 1
 /****************************************************************************************************************/
 /* Sleep mode memory map configuration. Only one or none of the following directives must be defined. The       */
 /* selection determines the memory map configuration. Sleep mode is determined by host application              */

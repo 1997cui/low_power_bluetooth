@@ -595,7 +595,7 @@ void BLE_SLP_Handler(void)
 {
 	ble_regs_pop();
     
-    SetBits16(SYS_CTRL_REG, DEBUGGER_ENABLE, 0);
+    SetBits16(SYS_CTRL_REG, DEBUGGER_ENABLE, 1);
 
 	SetBits16(GP_CONTROL_REG, BLE_WAKEUP_REQ, 0);   //just to be sure    
 
@@ -817,7 +817,7 @@ void BLE_SLP_Handler(void)
     
     wakeup_lp_comp = 0; // clear flag for next time
     
-    SetBits16(SYS_CTRL_REG, DEBUGGER_ENABLE, 0);
+    SetBits16(SYS_CTRL_REG, DEBUGGER_ENABLE, 1);
 
     SetBits16(GP_CONTROL_REG, BLE_WAKEUP_REQ, 0);   //just to be sure    
 
